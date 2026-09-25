@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello World</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      background: #f4f6f8;
+      color: #18212b;
+      transition: background-color 350ms ease;
+    }
+
+    main {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 1.5rem;
+      font-size: clamp(2.75rem, 8vw, 5rem);
+      line-height: 1.05;
+      font-weight: 700;
+    }
+
+    button {
+      min-height: 3rem;
+      padding: 0.75rem 1.25rem;
+      border: 0;
+      border-radius: 0.5rem;
+      background: #18212b;
+      color: #fff;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 150ms ease, background-color 150ms ease;
+    }
+
+    button:hover {
+      background: #344252;
+      transform: translateY(-2px);
+    }
+
+    button:focus-visible {
+      outline: 3px solid #4b83d1;
+      outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Hello World</h1>
+    <button id="color-button" type="button">Change background</button>
+  </main>
+
+  <script>
+    const colorButton = document.querySelector("#color-button");
+
+    colorButton.addEventListener("click", () => {
+      const red = Math.floor(Math.random() * 256);
+      const green = Math.floor(Math.random() * 256);
+      const blue = Math.floor(Math.random() * 256);
+      document.body.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+    });
+  </script>
+</body>
+</html>
