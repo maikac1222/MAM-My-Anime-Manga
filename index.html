@@ -6,8 +6,11 @@
   <title>Hello World</title>
   <style>
     :root {
-      color-scheme: light;
-      font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      font-family: "Avenir Next", Avenir, sans-serif;
+      color: #202322;
+      background: #f4f5f1;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
     }
 
     * {
@@ -19,29 +22,27 @@
       margin: 0;
       display: grid;
       place-items: center;
-      background: #f4f6f8;
-      color: #18212b;
-      transition: background-color 350ms ease;
+      padding: 24px;
+      transition: background-color 300ms ease;
     }
 
     main {
-      padding: 2rem;
       text-align: center;
     }
 
     h1 {
-      margin: 0 0 1.5rem;
-      font-size: clamp(2.75rem, 8vw, 5rem);
-      line-height: 1.05;
+      margin: 0 0 28px;
+      font-size: clamp(3rem, 10vw, 6rem);
+      line-height: 1;
       font-weight: 700;
     }
 
     button {
-      min-height: 3rem;
-      padding: 0.75rem 1.25rem;
+      min-height: 48px;
+      padding: 0 22px;
       border: 0;
-      border-radius: 0.5rem;
-      background: #18212b;
+      border-radius: 4px;
+      background: #202322;
       color: #fff;
       font: inherit;
       font-size: 1rem;
@@ -51,19 +52,14 @@
     }
 
     button:hover {
-      background: #344252;
+      background: #39413d;
       transform: translateY(-2px);
     }
 
     button:focus-visible {
-      outline: 3px solid #4b83d1;
-      outline-offset: 4px;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        transition-duration: 0.01ms !important;
-      }
+      outline: 3px solid #fff;
+      outline-offset: 3px;
+      box-shadow: 0 0 0 6px #202322;
     }
   </style>
 </head>
@@ -77,10 +73,8 @@
     const colorButton = document.querySelector("#color-button");
 
     colorButton.addEventListener("click", () => {
-      const red = Math.floor(Math.random() * 256);
-      const green = Math.floor(Math.random() * 256);
-      const blue = Math.floor(Math.random() * 256);
-      document.body.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+      const randomColor = `hsl(${Math.floor(Math.random() * 360)} 65% 78%)`;
+      document.body.style.backgroundColor = randomColor;
     });
   </script>
 </body>
