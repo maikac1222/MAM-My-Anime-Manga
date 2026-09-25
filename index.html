@@ -6,9 +6,16 @@
   <title>Hello World</title>
   <style>
     :root {
+      --fresno-red: #c41230;
+      --fresno-red-dark: #8f0d22;
+      --fresno-gold: #d9a441;
+      --fresno-navy: #0b1f2d;
+      --fresno-cream: #f6f0e8;
+      --fresno-white: #ffffff;
+
       font-family: "Avenir Next", Avenir, sans-serif;
-      color: #202322;
-      background: #f4f5f1;
+      color: var(--fresno-navy);
+      background: var(--fresno-cream);
       font-synthesis: none;
       text-rendering: optimizeLegibility;
     }
@@ -23,6 +30,7 @@
       display: grid;
       place-items: center;
       padding: 24px;
+      background: linear-gradient(135deg, #f6f0e8 0%, #f2ead9 100%);
       transition: background-color 300ms ease;
     }
 
@@ -35,31 +43,35 @@
       font-size: clamp(3rem, 10vw, 6rem);
       line-height: 1;
       font-weight: 700;
+      color: var(--fresno-navy);
     }
 
     button {
       min-height: 48px;
       padding: 0 22px;
       border: 0;
-      border-radius: 4px;
-      background: #202322;
-      color: #fff;
+      border-radius: 6px;
+      background: var(--fresno-red);
+      color: var(--fresno-white);
       font: inherit;
       font-size: 1rem;
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: 0.02em;
       cursor: pointer;
-      transition: transform 150ms ease, background-color 150ms ease;
+      box-shadow: 0 8px 20px rgba(196, 18, 48, 0.22);
+      transition: transform 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
     }
 
     button:hover {
-      background: #39413d;
+      background: var(--fresno-red-dark);
       transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(143, 13, 34, 0.26);
     }
 
     button:focus-visible {
-      outline: 3px solid #fff;
+      outline: 3px solid var(--fresno-gold);
       outline-offset: 3px;
-      box-shadow: 0 0 0 6px #202322;
+      box-shadow: 0 0 0 6px rgba(217, 164, 65, 0.35);
     }
   </style>
 </head>
@@ -71,10 +83,19 @@
 
   <script>
     const colorButton = document.querySelector("#color-button");
+    const fresnoColors = [
+      "#c41230",
+      "#d9a441",
+      "#0b1f2d",
+      "#f6f0e8",
+      "#8f0d22",
+      "#d9a441"
+    ];
 
     colorButton.addEventListener("click", () => {
-      const randomColor = `hsl(${Math.floor(Math.random() * 360)} 65% 78%)`;
+      const randomColor = fresnoColors[Math.floor(Math.random() * fresnoColors.length)];
       document.body.style.backgroundColor = randomColor;
+      document.body.style.color = randomColor === "#f6f0e8" ? "#0b1f2d" : "#ffffff";
     });
   </script>
 </body>
