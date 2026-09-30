@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #292929;
+      --accent: #bfe9ff;
+      --surface: #333333;
+      background: #292929;
+      color: var(--accent);
+      font-family: "Avenir Next", Avenir, sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 42px 24px 150px;
+      background: var(--background);
+    }
+
+    main {
+      width: min(100%, 860px);
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 30px;
+      color: var(--accent);
+      font-family: "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      font-size: clamp(1.65rem, 4vw, 2.25rem);
+      font-weight: 600;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .genre-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 155px), 1fr));
+      gap: 14px;
+    }
+
+    .genre-option {
+      display: flex;
+      min-height: 116px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
+      border: 2px solid rgba(191, 233, 255, 0.65);
+      border-radius: 22px;
+      background: var(--surface);
+      color: var(--accent);
+      font: 500 1rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      cursor: pointer;
+      transition: transform 150ms ease, background-color 150ms ease, border-color 150ms ease;
+    }
+
+    .genre-option:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      background: #3b4246;
+    }
+
+    .genre-option[aria-pressed="true"] {
+      border-color: var(--accent);
+      background: #41535d;
+      box-shadow: 0 0 0 2px rgba(191, 233, 255, 0.16);
+    }
+
+    .genre-option:focus-visible {
+      outline: 3px solid #ffffff;
+      outline-offset: 3px;
+    }
+
+    .genre-icon {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .selection-message {
+      min-height: 1.5em;
+      margin: 20px 0 0;
+      color: var(--accent);
+      font-family: "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      text-align: center;
+    }
+
+    .survey-footer {
+      position: fixed;
+      z-index: 2;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 20px;
+      min-height: 94px;
+      padding: 14px 24px;
+      border-top: 1px solid rgba(191, 233, 255, 0.2);
+      background: #222222;
+    }
+
+    .progress-cluster {
+      display: grid;
+      justify-self: center;
+      gap: 8px;
+      width: min(100%, 430px);
+    }
+
+    .progress-label {
+      margin: 0;
+      color: #f1dfbd;
+      font: 500 0.9rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+    }
+
+    .noodle-meter {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      height: 24px;
+    }
+
+    .noodle-segment {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .noodle-segment path {
+      fill: none;
+      stroke: #55504a;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 5;
+      transition: stroke 180ms ease, filter 180ms ease;
+    }
+
+    .noodle-segment.is-filled path {
+      stroke: #f1dfbd;
+      filter: drop-shadow(0 0 5px rgba(241, 223, 189, 0.85));
+    }
+
+    .confirm-button {
+      min-width: 134px;
+      min-height: 48px;
+      padding: 0 20px;
+      border: 0;
+      border-radius: 17px;
+      background: var(--accent);
+      color: var(--background);
+      font: 600 1rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      cursor: pointer;
+      box-shadow: 0 4px 0 rgba(191, 233, 255, 0.22);
+    }
+
+    .confirm-button:hover {
+      background: #d9f2ff;
+    }
+
+    .confirm-button:focus-visible {
+      outline: 3px solid #ffffff;
+      outline-offset: 3px;
+    }
+
+    .confirm-button[hidden] {
+      display: none;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 32px 16px 160px;
+      }
+
+      .genre-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .genre-option {
+        min-height: 104px;
+        border-radius: 18px;
+      }
+
+      .survey-footer {
+        gap: 12px;
+        min-height: 100px;
+        padding: 12px 16px;
+      }
+
+      .progress-cluster {
+        gap: 6px;
+      }
+
+      .confirm-button {
+        min-width: 108px;
+        padding: 0 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>What's your favorite genre?</h1>
+    <div class="genre-grid" role="group" aria-label="Choose at least three anime and manga genres">
+      <button class="genre-option" type="button" data-genre="Action" aria-pressed="false"><span class="genre-icon" aria-hidden="true">⚔️</span><span>Action</span></button>
+      <button class="genre-option" type="button" data-genre="Adventure" aria-pressed="false"><span class="genre-icon" aria-hidden="true">🧭</span><span>Adventure</span></button>
+      <button class="genre-option" type="button" data-genre="Comedy" aria-pressed="false"><span class="genre-icon" aria-hidden="true">😄</span><span>Comedy</span></button>
+      <button class="genre-option" type="button" data-genre="Drama" aria-pressed="false"><span class="genre-icon" aria-hidden="true">🎭</span><span>Drama</span></button>
+      <button class="genre-option" type="button" data-genre="Fantasy" aria-pressed="false"><span class="genre-icon" aria-hidden="true">🐉</span><span>Fantasy</span></button>
+      <button class="genre-option" type="button" data-genre="Horror" aria-pressed="false"><span class="genre-icon" aria-hidden="true">👻</span><span>Horror</span></button>
+      <button class="genre-option" type="button" data-genre="Romance" aria-pressed="false"><span class="genre-icon" aria-hidden="true">💗</span><span>Romance</span></button>
+      <button class="genre-option" type="button" data-genre="Sci-Fi" aria-pressed="false"><span class="genre-icon" aria-hidden="true">🚀</span><span>Sci-Fi</span></button>
+      <button class="genre-option" type="button" data-genre="Slice of Life" aria-pressed="false"><span class="genre-icon" aria-hidden="true">🍵</span><span>Slice of Life</span></button>
+      <button class="genre-option" type="button" data-genre="Sports" aria-pressed="false"><span class="genre-icon" aria-hidden="true">🏐</span><span>Sports</span></button>
+      <button class="genre-option" type="button" data-genre="Isekai" aria-pressed="false"><span class="genre-icon" aria-hidden="true">🌀</span><span>Isekai</span></button>
+      <button class="genre-option" type="button" data-genre="Mecha" aria-pressed="false"><span class="genre-icon" aria-hidden="true">🤖</span><span>Mecha</span></button>
+    </div>
+    <p class="selection-message" id="selection-message" aria-live="polite"></p>
+  </main>
+  <footer class="survey-footer">
+    <div class="progress-cluster">
+      <p class="progress-label" id="progress-label">0 of 3 genres selected</p>
+      <div class="noodle-meter" id="noodle-meter" role="progressbar" aria-label="Genre selection progress" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
+        <svg class="noodle-segment" viewBox="0 0 100 24" aria-hidden="true"><path d="M4 12c12-15 18 15 30 0s18 15 30 0 18 15 32 0"></path></svg>
+        <svg class="noodle-segment" viewBox="0 0 100 24" aria-hidden="true"><path d="M4 12c12-15 18 15 30 0s18 15 30 0 18 15 32 0"></path></svg>
+        <svg class="noodle-segment" viewBox="0 0 100 24" aria-hidden="true"><path d="M4 12c12-15 18 15 30 0s18 15 30 0 18 15 32 0"></path></svg>
+      </div>
+    </div>
+    <button class="confirm-button" id="confirm-genres" type="button" hidden>Confirm</button>
+  </footer>
+  <script src="auth.js"></script>
+  <script>
+    const genreOptions = document.querySelectorAll(".genre-option");
+    const selectionMessage = document.querySelector("#selection-message");
+    const progressLabel = document.querySelector("#progress-label");
+    const noodleMeter = document.querySelector("#noodle-meter");
+    const noodleSegments = document.querySelectorAll(".noodle-segment");
+    const confirmButton = document.querySelector("#confirm-genres");
+    const selectedGenres = new Set();
+
+    function updateGenreProgress() {
+      const progress = Math.min(selectedGenres.size, 3);
+      progressLabel.textContent = `${selectedGenres.size} of 3 genres selected`;
+      noodleMeter.setAttribute("aria-valuenow", String(progress));
+      noodleSegments.forEach((segment, index) => {
+        segment.classList.toggle("is-filled", index < progress);
+      });
+      confirmButton.hidden = selectedGenres.size < 3;
+    }
+
+    window.MamAuth.getUser().then(({ data }) => {
+      if (!data.user) {
+        window.location.replace("index.html");
+        return;
+      }
+
+      (data.user.favoriteGenres || []).forEach((genre) => {
+        const selectedOption = [...genreOptions].find((option) => option.dataset.genre === genre);
+        if (selectedOption) {
+          selectedGenres.add(genre);
+          selectedOption.setAttribute("aria-pressed", "true");
+        }
+      });
+      updateGenreProgress();
+    });
+
+    genreOptions.forEach((option) => {
+      option.addEventListener("click", () => {
+        const genre = option.dataset.genre;
+        if (selectedGenres.has(genre)) {
+          selectedGenres.delete(genre);
+          option.setAttribute("aria-pressed", "false");
+        } else {
+          selectedGenres.add(genre);
+          option.setAttribute("aria-pressed", "true");
+        }
+
+        updateGenreProgress();
+        if (!window.MamAuth.saveFavoriteGenres([...selectedGenres])) {
+          window.location.replace("index.html");
+          return;
+        }
+        selectionMessage.textContent = selectedGenres.size >= 3
+          ? `${genre} ${selectedGenres.has(genre) ? "added to" : "removed from"} your genres. You can confirm or choose more.`
+          : `${selectedGenres.size} of 3 genres selected.`;
+      });
+    });
+
+    confirmButton.addEventListener("click", () => {
+      if (selectedGenres.size >= 3) {
+        window.location.assign("main-home.html");
+      }
+    });
+  </script>
+</body>
+</html>

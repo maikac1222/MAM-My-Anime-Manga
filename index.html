@@ -3,19 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hello World</title>
+  <title>MAM | My Anime &amp; Manga</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --fresno-red: #c41230;
-      --fresno-red-dark: #8f0d22;
-      --fresno-gold: #d9a441;
-      --fresno-navy: #0b1f2d;
-      --fresno-cream: #f6f0e8;
-      --fresno-white: #ffffff;
+      --background: #292929;
+      --accent: #bfe9ff;
 
       font-family: "Avenir Next", Avenir, sans-serif;
-      color: var(--fresno-navy);
-      background: var(--fresno-cream);
+      color: var(--accent);
+      background: var(--background);
       font-synthesis: none;
       text-rendering: optimizeLegibility;
     }
@@ -27,11 +26,8 @@
     body {
       min-height: 100vh;
       margin: 0;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      background: linear-gradient(135deg, #f6f0e8 0%, #f2ead9 100%);
-      transition: background-color 300ms ease;
+      padding: 28px 24px;
+      background: var(--background);
     }
 
     main {
@@ -39,63 +35,271 @@
     }
 
     h1 {
-      margin: 0 0 28px;
+      margin: 0;
+      font-family: "Fredoka", "Arial Rounded MT Bold", sans-serif;
       font-size: clamp(3rem, 10vw, 6rem);
       line-height: 1;
       font-weight: 700;
-      color: var(--fresno-navy);
+      color: var(--accent);
     }
 
-    button {
-      min-height: 48px;
-      padding: 0 22px;
+    p {
+      margin: 8px 0 0;
+      font-family: "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      color: var(--accent);
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      line-height: 1.2;
+    }
+
+    .entry-fields {
+      display: grid;
+      gap: 14px;
+      width: min(100%, 420px);
+      margin: 32px auto 0;
+    }
+
+    .entry-box {
+      min-height: 68px;
+      padding: 10px 18px;
+      border: 2px solid rgba(191, 233, 255, 0.78);
+      border-radius: 18px;
+      background: #333333;
+      box-shadow: 0 4px 0 rgba(191, 233, 255, 0.12);
+      text-align: left;
+    }
+
+    .entry-box label {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--accent);
+      font-family: "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      font-size: 0.85rem;
+      line-height: 1;
+    }
+
+    .entry-box input {
+      width: 100%;
+      min-height: 28px;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--accent);
+      font: 500 1rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+    }
+
+    .entry-box:focus-within {
+      border-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(191, 233, 255, 0.2);
+    }
+
+    .entry-box input:focus-visible {
+      outline: none;
+    }
+
+    .password-input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .password-input-row input {
+      flex: 1;
+      width: 0;
+      min-width: 0;
+    }
+
+    .password-toggle {
+      display: grid;
+      flex: 0 0 32px;
+      width: 32px;
+      height: 28px;
+      place-items: center;
+      padding: 0;
       border: 0;
       border-radius: 6px;
-      background: var(--fresno-red);
-      color: var(--fresno-white);
-      font: inherit;
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
+      background: transparent;
+      color: var(--accent);
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(196, 18, 48, 0.22);
-      transition: transform 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
     }
 
-    button:hover {
-      background: var(--fresno-red-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(143, 13, 34, 0.26);
+    .password-toggle:hover {
+      background: rgba(191, 233, 255, 0.12);
     }
 
-    button:focus-visible {
-      outline: 3px solid var(--fresno-gold);
+    .password-toggle:focus-visible {
+      outline: 2px solid #ffffff;
+      outline-offset: 2px;
+    }
+
+    .password-toggle svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+
+    .eye-slash {
+      display: block;
+    }
+
+    .password-toggle[aria-pressed="true"] .eye-slash {
+      display: none;
+    }
+
+    .login-button {
+      justify-self: center;
+      width: min(100%, 180px);
+      min-height: 54px;
+      border: 0;
+      border-radius: 18px;
+      background: var(--accent);
+      color: var(--background);
+      font: 600 1.1rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      cursor: pointer;
+      box-shadow: 0 4px 0 rgba(191, 233, 255, 0.28);
+    }
+
+    .login-button:hover {
+      background: #d9f2ff;
+    }
+
+    .login-button:focus-visible {
+      outline: 3px solid #ffffff;
       outline-offset: 3px;
-      box-shadow: 0 0 0 6px rgba(217, 164, 65, 0.35);
+    }
+
+    .account-link {
+      justify-self: center;
+      color: var(--accent);
+      font-family: "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      font-size: 1rem;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .account-link:hover {
+      color: #ffffff;
+    }
+
+    .form-message {
+      min-height: 1.25em;
+      margin: 0;
+      color: #ffd1d1;
+      font-family: "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .ramen-mark {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      width: 100px;
+      height: 100px;
+    }
+
+    .ramen-mark svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    @media (max-width: 480px) {
+      .ramen-mark {
+        top: 12px;
+        right: 12px;
+        width: 82px;
+        height: 82px;
+      }
     }
   </style>
 </head>
 <body>
   <main>
-    <h1>Hello World</h1>
-    <button id="color-button" type="button">Change background</button>
+    <h1>MAM</h1>
+    <p>My Anime &amp; Manga</p>
+    <form class="entry-fields" autocomplete="off">
+      <div class="entry-box">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" aria-label="Email" required>
+      </div>
+      <div class="entry-box">
+        <label for="password">Password</label>
+        <div class="password-input-row">
+          <input id="password" name="password" type="password" aria-label="Password" required>
+          <button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false" aria-controls="password">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+              <path class="eye-slash" d="M4 4 20 20"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <button class="login-button" type="submit">Login</button>
+      <a class="account-link" href="signup.html">Create an account</a>
+      <p class="form-message" id="login-message" role="alert" aria-live="polite"></p>
+    </form>
   </main>
-
+  <div class="ramen-mark">
+    <svg viewBox="0 0 160 160" role="img" aria-labelledby="ramen-title">
+      <title id="ramen-title">MAM ramen bowl with noodles and chopsticks</title>
+      <g fill="none" stroke="#d3d3d3" stroke-linecap="round" stroke-width="5">
+        <path d="M25 24 96 44"></path>
+        <path d="M28 33 99 53"></path>
+      </g>
+      <g fill="none" stroke="#f1dfbd" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5">
+        <path d="M96 45c-10 5 4 10-5 16s3 10-5 16 2 10-5 16 1 8-2 12"></path>
+        <path d="M98 52c-9 5 3 10-5 16s3 10-4 15 2 10-4 14 1 7-1 10"></path>
+      </g>
+      <path d="M27 91c3 26 20 45 53 45s50-19 53-45H27Z" fill="#7d1f2c" stroke="#a9434c" stroke-width="3"></path>
+      <ellipse cx="80" cy="91" rx="54" ry="12" fill="#451c22" stroke="#a9434c" stroke-width="4"></ellipse>
+      <ellipse cx="80" cy="90" rx="43" ry="6.5" fill="#f1dfbd"></ellipse>
+      <path d="m88 93 3-12 4 3 3-6 3 15Z" fill="#294338" stroke="#1d3029" stroke-linejoin="round" stroke-width="1.5"></path>
+      <g fill="#fff8e8" stroke="#d9c49f" stroke-width="1.2">
+        <ellipse cx="62" cy="90" rx="8" ry="4.5"></ellipse>
+        <ellipse cx="78" cy="87" rx="8" ry="4.5"></ellipse>
+      </g>
+      <g fill="#e7a83c">
+        <circle cx="62" cy="90" r="2.2"></circle>
+        <circle cx="78" cy="87" r="2.2"></circle>
+      </g>
+      <text x="80" y="121" fill="#f1dfbd" font-family="Fredoka, 'Arial Rounded MT Bold', sans-serif" font-size="27" font-weight="700" text-anchor="middle">MAM</text>
+      <path d="M46 137c19 8 49 8 68 0" fill="none" stroke="#a9434c" stroke-linecap="round" stroke-width="3"></path>
+    </svg>
+  </div>
+  <script src="auth.js"></script>
   <script>
-    const colorButton = document.querySelector("#color-button");
-    const fresnoColors = [
-      "#c41230",
-      "#d9a441",
-      "#0b1f2d",
-      "#f6f0e8",
-      "#8f0d22",
-      "#d9a441"
-    ];
+    const passwordInput = document.querySelector("#password");
+    const passwordToggle = document.querySelector(".password-toggle");
 
-    colorButton.addEventListener("click", () => {
-      const randomColor = fresnoColors[Math.floor(Math.random() * fresnoColors.length)];
-      document.body.style.backgroundColor = randomColor;
-      document.body.style.color = randomColor === "#f6f0e8" ? "#0b1f2d" : "#ffffff";
+    passwordToggle.addEventListener("click", () => {
+      const showingPassword = passwordInput.type === "password";
+      passwordInput.type = showingPassword ? "text" : "password";
+      passwordToggle.setAttribute("aria-pressed", String(showingPassword));
+      passwordToggle.setAttribute("aria-label", showingPassword ? "Hide password" : "Show password");
+    });
+
+    document.querySelector(".entry-fields").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const email = document.querySelector("#email").value;
+      const password = passwordInput.value;
+      const loginMessage = document.querySelector("#login-message");
+      try {
+        const { error } = await window.MamAuth.authenticate(email, password);
+        if (error) {
+          loginMessage.textContent = error.message;
+          return;
+        }
+
+        window.location.assign("home.html");
+      } catch {
+        loginMessage.textContent = "Unable to verify this account. Try again.";
+      }
     });
   </script>
 </body>
