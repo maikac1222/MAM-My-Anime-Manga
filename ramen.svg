@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="ramen-title">
+  <title id="ramen-title">MAM ramen bowl with noodles and chopsticks</title>
+  <g fill="none" stroke="#d3d3d3" stroke-linecap="round" stroke-width="5">
+    <path d="M25 24 96 44"/>
+    <path d="M28 33 99 53"/>
+  </g>
+  <g fill="none" stroke="#f1dfbd" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5">
+    <path d="M96 45c-10 5 4 10-5 16s3 10-5 16 2 10-5 16 1 8-2 12"/>
+    <path d="M98 52c-9 5 3 10-5 16s3 10-4 15 2 10-4 14 1 7-1 10"/>
+  </g>
+  <path d="M27 91c3 26 20 45 53 45s50-19 53-45H27Z" fill="#7d1f2c" stroke="#a9434c" stroke-width="3"/>
+  <ellipse cx="80" cy="91" rx="54" ry="12" fill="#451c22" stroke="#a9434c" stroke-width="4"/>
+  <ellipse cx="80" cy="90" rx="43" ry="6.5" fill="#f1dfbd"/>
+  <path d="m88 93 3-12 4 3 3-6 3 15Z" fill="#294338" stroke="#1d3029" stroke-linejoin="round" stroke-width="1.5"/>
+  <g fill="#fff8e8" stroke="#d9c49f" stroke-width="1.2">
+    <ellipse cx="62" cy="90" rx="8" ry="4.5"/>
+    <ellipse cx="78" cy="87" rx="8" ry="4.5"/>
+  </g>
+  <g fill="#e7a83c">
+    <circle cx="62" cy="90" r="2.2"/>
+    <circle cx="78" cy="87" r="2.2"/>
+  </g>
+  <text x="80" y="121" fill="#f1dfbd" font-family="Fredoka, Arial Rounded MT Bold, sans-serif" font-size="27" font-weight="700" text-anchor="middle">MAM</text>
+  <path d="M46 137c19 8 49 8 68 0" fill="none" stroke="#a9434c" stroke-linecap="round" stroke-width="3"/>
+</svg>

@@ -4,26 +4,52 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#292929">
-  <title>Home | MAM</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      background: #292929;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      min-height: 100vh;
-      margin: 0;
-      background: #292929;
-    }
-  </style>
+  <title>MAM | My Anime &amp; Manga</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main-nav.css">
 </head>
 <body>
+  <header class="site-header site-header--home">
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="anime.html">Anime</a>
+      <a href="manga.html">Manga</a>
+      <a href="my-tracker.html">My Tracker</a>
+    </nav>
+  </header>
+  <main class="home-content">
+    <section class="recommendation-group" aria-labelledby="anime-recommendation-heading">
+      <h1 class="home-panel-heading" id="anime-recommendation-heading">Recommended Anime for you</h1>
+      <div class="home-panel" data-category="anime" role="region" aria-labelledby="anime-recommendation-heading">
+        <button class="carousel-control" type="button" data-scroll="-1" aria-label="Scroll anime posters left" title="Scroll left" disabled>
+          <span aria-hidden="true">&lsaquo;</span>
+        </button>
+        <div class="poster-track" tabindex="0" aria-label="Recommended anime posters" aria-live="polite">
+          <p class="poster-status" role="status">Loading recommendations...</p>
+        </div>
+        <button class="carousel-control" type="button" data-scroll="1" aria-label="Scroll anime posters right" title="Scroll right" disabled>
+          <span aria-hidden="true">&rsaquo;</span>
+        </button>
+      </div>
+    </section>
+    <section class="recommendation-group" aria-labelledby="manga-recommendation-heading">
+      <h2 class="home-panel-heading" id="manga-recommendation-heading">Recommended Manga for you</h2>
+      <div class="home-panel" data-category="manga" role="region" aria-labelledby="manga-recommendation-heading">
+        <button class="carousel-control" type="button" data-scroll="-1" aria-label="Scroll manga posters left" title="Scroll left" disabled>
+          <span aria-hidden="true">&lsaquo;</span>
+        </button>
+        <div class="poster-track" tabindex="0" aria-label="Recommended manga covers" aria-live="polite">
+          <p class="poster-status" role="status">Loading recommendations...</p>
+        </div>
+        <button class="carousel-control" type="button" data-scroll="1" aria-label="Scroll manga posters right" title="Scroll right" disabled>
+          <span aria-hidden="true">&rsaquo;</span>
+        </button>
+      </div>
+    </section>
+  </main>
   <script src="auth.js"></script>
+  <script src="main-home.js"></script>
   <script>
     window.MamAuth.getUser().then(({ data }) => {
       if (!data.user) {
