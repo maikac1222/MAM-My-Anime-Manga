@@ -83,8 +83,23 @@
         return { error: new Error("Email or password is incorrect.") };
       }
 
+      account.loginCount = (account.loginCount || 0) + 1;
+      account.lastLoginAt = new Date().toISOString();
+      localStorage.setItem(accountsStorageKey, JSON.stringify(
+        getAccounts().map((savedAccount) => savedAccount.normalizedEmail === account.normalizedEmail ? account : savedAccount)
+      ));
       localStorage.setItem(sessionStorageKey, account.normalizedEmail);
-      return { data: { user: { email: account.email, username: account.username } }, error: null };
+      return {
+        data: {
+          user: {
+            email: account.email,
+            username: account.username,
+            loginCount: account.loginCount,
+            lastLoginAt: account.lastLoginAt
+          }
+        },
+        error: null
+      };
     } catch {
       return { error: new Error("Unable to verify this account in the browser.") };
     }
@@ -100,7 +115,9 @@
           ? {
               email: account.email,
               username: account.username,
-              favoriteGenres: account.favoriteGenres || (account.favoriteGenre ? [account.favoriteGenre] : [])
+              favoriteGenres: account.favoriteGenres || (account.favoriteGenre ? [account.favoriteGenre] : []),
+              loginCount: account.loginCount || 0,
+              lastLoginAt: account.lastLoginAt || null
             }
           : null
       },

@@ -4,26 +4,155 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#292929">
-  <title>My Tracker | MAM</title>
+  <title>Login Tracker | MAM</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="main-nav.css">
+  <style>
+    .tracker-content {
+      width: min(100%, 900px);
+      margin: 42px auto 0;
+    }
+
+    .login-track {
+      position: relative;
+      min-height: 144px;
+      overflow: hidden;
+      border: 2px solid rgba(191, 233, 255, 0.7);
+      border-radius: 28px;
+      background: #333333;
+      box-shadow: inset 0 0 24px rgba(191, 233, 255, 0.06);
+    }
+
+    .track-line {
+      position: absolute;
+      right: 34px;
+      bottom: 24px;
+      left: 34px;
+      height: 3px;
+      border-radius: 2px;
+      background: rgba(191, 233, 255, 0.22);
+    }
+
+    .runner {
+      position: absolute;
+      bottom: 22px;
+      left: 8%;
+      width: 64px;
+      height: 72px;
+      transform: translateX(-50%);
+      transition: left 800ms cubic-bezier(0.2, 0.75, 0.25, 1);
+      filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
+    }
+
+    .runner svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      animation: running-bob 280ms ease-in-out infinite alternate;
+      transform-origin: 50% 90%;
+    }
+
+    @keyframes running-bob {
+      from { transform: translateY(0) rotate(-3deg); }
+      to { transform: translateY(-3px) rotate(3deg); }
+    }
+
+    .last-login {
+      margin: 18px 4px 0;
+      color: #bfe9ff;
+      font: 500 1rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+    }
+
+    .last-login time {
+      color: #f1dfbd;
+    }
+
+    @media (max-width: 600px) {
+      .tracker-content {
+        margin-top: 30px;
+      }
+
+      .login-track {
+        min-height: 126px;
+        border-radius: 24px;
+      }
+
+      .runner {
+        bottom: 18px;
+        width: 58px;
+        height: 66px;
+      }
+
+      .track-line {
+        right: 24px;
+        bottom: 20px;
+        left: 24px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
     <nav class="site-nav" aria-label="Main navigation">
       <a href="anime.html">Anime</a>
       <a href="manga.html">Manga</a>
-      <a href="my-tracker.html" aria-current="page">My Tracker</a>
+      <a href="my-tracker.html" aria-current="page">Tracker</a>
     </nav>
     <a class="ramen-link" href="main-home.html" aria-label="Return to the main page"><img src="ramen.svg" alt=""></a>
   </header>
-  <main><h1>My Tracker</h1></main>
+  <main class="tracker-content">
+    <section class="login-track" id="login-track" role="img" aria-label="Login progress tracker">
+      <div class="track-line" aria-hidden="true"></div>
+      <div class="runner" id="runner" aria-hidden="true">
+        <svg viewBox="0 0 76 82">
+          <ellipse cx="39" cy="75" rx="21" ry="4" fill="#202020" opacity="0.55"></ellipse>
+          <path d="m30 53-12 9-8 1m20-7 12 11 12 2" fill="none" stroke="#252a33" stroke-linecap="round" stroke-width="7"></path>
+          <path d="m18 62-7 7m43 7 9 1" fill="none" stroke="#bfe9ff" stroke-linecap="round" stroke-width="5"></path>
+          <path d="m35 38-13 8-9-1m28-5 12-9 8-1" fill="none" stroke="#f28c28" stroke-linecap="round" stroke-width="7"></path>
+          <path d="m13 45-7-4m55-10 7 2" fill="none" stroke="#252a33" stroke-linecap="round" stroke-width="5"></path>
+          <path d="m31 32-4 18 17 2 3-19Z" fill="#f28c28" stroke="#b95727" stroke-width="2"></path>
+          <path d="m31 35 12 2m-12 4 11 2" stroke="#f1dfbd" stroke-linecap="round" stroke-width="2"></path>
+          <path d="M29 15c2-8 9-11 16-7l8 8-5 12-19-1-7-6 6-2Z" fill="#252a33"></path>
+          <ellipse cx="39" cy="21" rx="10" ry="11" fill="#d99b6c"></ellipse>
+          <path d="M27 18 20 13l9 1 2-8 5 7 6-10 2 11 9-5-4 10Z" fill="#252a33"></path>
+          <path d="M29 16c6-4 15-4 22 1l-1 5c-7-3-14-3-21 0Z" fill="#bfe9ff"></path>
+          <path d="M31 22c5 2 10 2 15 0" fill="none" stroke="#252a33" stroke-linecap="round" stroke-width="3"></path>
+          <circle cx="36" cy="19" r="1.2" fill="#252a33"></circle>
+          <circle cx="44" cy="19" r="1.2" fill="#252a33"></circle>
+        </svg>
+      </div>
+    </section>
+    <p class="last-login">Last login: <time id="last-login-time">Loading...</time></p>
+  </main>
   <script src="auth.js"></script>
   <script>
     window.MamAuth.getUser().then(({ data }) => {
-      if (!data.user) window.location.replace("index.html");
+      if (!data.user) {
+        window.location.replace("index.html");
+        return;
+      }
+
+      const loginCount = data.user.loginCount || 0;
+      const progress = Math.min(8 + loginCount * 5, 90);
+      const runner = document.querySelector("#runner");
+      const timestamp = document.querySelector("#last-login-time");
+
+      runner.style.left = `${progress}%`;
+      document.querySelector("#login-track").setAttribute("aria-label", `Login progress: ${loginCount} successful ${loginCount === 1 ? "login" : "logins"}`);
+
+      if (data.user.lastLoginAt) {
+        const lastLogin = new Date(data.user.lastLoginAt);
+        timestamp.dateTime = lastLogin.toISOString();
+        timestamp.textContent = new Intl.DateTimeFormat(undefined, {
+          dateStyle: "medium",
+          timeStyle: "short"
+        }).format(lastLogin);
+      } else {
+        timestamp.textContent = "Not recorded";
+      }
     });
   </script>
 </body>
