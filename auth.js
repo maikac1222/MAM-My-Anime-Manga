@@ -69,9 +69,11 @@
     }
   }
 
-  async function authenticate(email, password) {
-    const normalizedEmail = email.trim().toLowerCase();
-    const account = getAccounts().find((savedAccount) => savedAccount.normalizedEmail === normalizedEmail);
+  async function authenticate(identifier, password) {
+    const normalizedIdentifier = identifier.trim().toLowerCase();
+    const accounts = getAccounts();
+    const account = accounts.find((savedAccount) => savedAccount.normalizedEmail === normalizedIdentifier)
+      || accounts.find((savedAccount) => savedAccount.normalizedUsername === normalizedIdentifier);
 
     if (!account) {
       return { error: new Error("Email or password is incorrect.") };
@@ -116,6 +118,12 @@
               email: account.email,
               username: account.username,
               favoriteGenres: account.favoriteGenres || (account.favoriteGenre ? [account.favoriteGenre] : []),
+              animeList: account.animeList || [],
+              animeBookmarks: account.animeBookmarks || [],
+              favoriteAnime: account.favoriteAnime || [],
+              mangaList: account.mangaList || [],
+              mangaBookmarks: account.mangaBookmarks || [],
+              favoriteManga: account.favoriteManga || [],
               loginCount: account.loginCount || 0,
               lastLoginAt: account.lastLoginAt || null
             }
@@ -140,5 +148,96 @@
     return true;
   }
 
-  window.MamAuth = { authenticate, createAccount, getUser, saveFavoriteGenres };
+  function saveAnimeRecord(collectionName, anime) {
+    const normalizedEmail = localStorage.getItem(sessionStorageKey);
+    const accounts = getAccounts();
+    const account = accounts.find((savedAccount) => savedAccount.normalizedEmail === normalizedEmail);
+
+    if (!account || !anime?.id) {
+      return false;
+    }
+
+    const records = account[collectionName] || [];
+    const existingIndex = records.findIndex((record) => String(record.id) === String(anime.id));
+    if (existingIndex === -1) {
+      records.push(anime);
+    } else {
+      records[existingIndex] = { ...records[existingIndex], ...anime };
+    }
+    account[collectionName] = records;
+    localStorage.setItem(accountsStorageKey, JSON.stringify(accounts));
+    return true;
+  }
+
+  function saveAnimeToWatchLater(anime) {
+    return saveAnimeRecord("animeList", anime);
+  }
+
+  function saveAnimeBookmark(anime) {
+    return saveAnimeRecord("animeBookmarks", anime);
+  }
+
+  function toggleAnimeFavorite(anime) {
+    const normalizedEmail = localStorage.getItem(sessionStorageKey);
+    const accounts = getAccounts();
+    const account = accounts.find((savedAccount) => savedAccount.normalizedEmail === normalizedEmail);
+
+    if (!account || !anime?.id) {
+      return null;
+    }
+
+    const favorites = account.favoriteAnime || [];
+    const existingIndex = favorites.findIndex((record) => String(record.id) === String(anime.id));
+    const isFavorite = existingIndex === -1;
+    if (isFavorite) {
+      favorites.push(anime);
+    } else {
+      favorites.splice(existingIndex, 1);
+    }
+    account.favoriteAnime = favorites;
+
+    try {
+      localStorage.setItem(accountsStorageKey, JSON.stringify(accounts));
+      return isFavorite;
+    } catch {
+      return null;
+    }
+  }
+
+  function saveMangaToWatchLater(manga) {
+    return saveAnimeRecord("mangaList", manga);
+  }
+
+  function saveMangaBookmark(manga) {
+    return saveAnimeRecord("mangaBookmarks", manga);
+  }
+
+  function toggleMangaFavorite(manga) {
+    const normalizedEmail = localStorage.getItem(sessionStorageKey);
+    const accounts = getAccounts();
+    const account = accounts.find((savedAccount) => savedAccount.normalizedEmail === normalizedEmail);
+
+    if (!account || !manga?.id) {
+      return null;
+    }
+
+    const favorites = account.favoriteManga || [];
+    const existingIndex = favorites.findIndex((record) => String(record.id) === String(manga.id));
+    const isFavorite = existingIndex === -1;
+    if (isFavorite) {
+      favorites.push(manga);
+    } else {
+      favorites.splice(existingIndex, 1);
+    }
+    account.favoriteManga = favorites;
+
+    try {
+      localStorage.setItem(accountsStorageKey, JSON.stringify(accounts));
+      return isFavorite;
+    } catch {
+      return null;
+    }
+  }
+
+  window.MamAuth = { authenticate, createAccount, getUser, saveFavoriteGenres, saveAnimeToWatchLater, saveAnimeBookmark, toggleAnimeFavorite, saveMangaToWatchLater, saveMangaBookmark, toggleMangaFavorite };
 })();

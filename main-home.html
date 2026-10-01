@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="main-nav.css">
 </head>
 <body>
@@ -15,9 +16,12 @@
     <nav class="site-nav" aria-label="Main navigation">
       <a href="anime.html">Anime</a>
       <a href="manga.html">Manga</a>
-      <a href="my-tracker.html">My Tracker</a>
+      <a href="my-tracker.html?v=tracker-bookmark-filters-v3-202610">My Tracker</a>
     </nav>
+    <a class="ramen-link" href="main-home.html" aria-label="Return to the main page"><img src="ramen.svg" alt=""></a>
   </header>
+  <h1 class="home-brand-title">My Anime &amp; Manga</h1>
+  <p class="home-brand-subtitle">keep track of all of your favorites here!</p>
   <main class="home-content">
     <section class="recommendation-group" aria-labelledby="anime-recommendation-heading">
       <h1 class="home-panel-heading" id="anime-recommendation-heading">Recommended Anime for you</h1>
@@ -49,7 +53,7 @@
     </section>
   </main>
   <script src="auth.js"></script>
-  <script src="main-home.js"></script>
+  <script src="main-home-recommendations.js"></script>
   <script>
     window.MamAuth.getUser().then(({ data }) => {
       if (!data.user) {

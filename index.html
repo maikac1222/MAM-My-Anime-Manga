@@ -196,7 +196,8 @@
     .ramen-mark {
       position: absolute;
       top: 16px;
-      right: 18px;
+      right: auto;
+      left: 18px;
       width: 100px;
       height: 100px;
     }
@@ -211,7 +212,8 @@
     @media (max-width: 480px) {
       .ramen-mark {
         top: 12px;
-        right: 12px;
+        right: auto;
+        left: 12px;
         width: 82px;
         height: 82px;
       }
@@ -224,8 +226,8 @@
     <p>My Anime &amp; Manga</p>
     <form class="entry-fields" autocomplete="off">
       <div class="entry-box">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" autocomplete="email" aria-label="Email" required>
+        <label for="login-identifier">Email or username</label>
+        <input id="login-identifier" name="identifier" type="text" autocomplete="username" aria-label="Email or username" required>
       </div>
       <div class="entry-box">
         <label for="password">Password</label>
@@ -286,11 +288,11 @@
 
     document.querySelector(".entry-fields").addEventListener("submit", async (event) => {
       event.preventDefault();
-      const email = document.querySelector("#email").value;
+      const identifier = document.querySelector("#login-identifier").value;
       const password = passwordInput.value;
       const loginMessage = document.querySelector("#login-message");
       try {
-        const { error } = await window.MamAuth.authenticate(email, password);
+        const { error } = await window.MamAuth.authenticate(identifier, password);
         if (error) {
           loginMessage.textContent = error.message;
           return;
