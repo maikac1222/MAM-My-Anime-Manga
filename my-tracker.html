@@ -46,6 +46,45 @@
       border-bottom: 1px solid rgba(191, 233, 255, 0.28);
     }
 
+    .media-tabs {
+      display: flex;
+      width: fit-content;
+      max-width: 100%;
+      gap: 26px;
+      margin-top: 38px;
+      border-bottom: 1px solid rgba(191, 233, 255, 0.32);
+    }
+
+    .media-tab {
+      min-height: 48px;
+      padding: 8px 4px;
+      border: 0;
+      border-bottom: 3px solid transparent;
+      background: transparent;
+      color: #bfe9ff;
+      font: 600 1.2rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      cursor: pointer;
+    }
+
+    .media-tab[aria-selected="true"] {
+      border-bottom-color: #f1dfbd;
+      color: #fff;
+    }
+
+    .media-tab:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+
+    .media-section[hidden],
+    .tracker-panel[hidden] {
+      display: none;
+    }
+
+    .media-section > .tracker-tabs {
+      margin-top: 0;
+    }
+
     .tracker-tab {
       min-height: 44px;
       padding: 8px 2px;
@@ -66,8 +105,6 @@
       outline: 2px solid #fff;
       outline-offset: 2px;
     }
-
-    .tracker-panel[hidden] { display: none; }
 
     .bookmark-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: -4px 0 6px; }
     .bookmark-filter { min-height: 32px; padding: 5px 12px; border: 1px solid rgba(191, 233, 255, .44); border-radius: 999px; background: #333; color: #d3d3d3; font: 500 .82rem "Fredoka", "Arial Rounded MT Bold", sans-serif; cursor: pointer; }
@@ -193,6 +230,8 @@
       .progress-character { width: 38px; height: 48px; }
       .tracker-tabs { gap: 14px; }
       .tracker-tab { font-size: .92rem; }
+      .media-tabs { gap: 22px; margin-top: 30px; }
+      .media-tab { font-size: 1.08rem; }
     }
   </style>
 </head>
@@ -227,42 +266,52 @@
           <path d="M34 32c1 3 5 3 7 0" fill="none" stroke="#303b43" stroke-linecap="round" stroke-width="1.8"></path>
         </svg>
     </template>
-    <div class="tracker-tabs" role="tablist" aria-label="Anime lists">
-      <button class="tracker-tab" id="tab-bookmarked" type="button" role="tab" aria-selected="true" aria-controls="panel-bookmarked" tabindex="0">Bookmarked Anime</button>
-      <button class="tracker-tab" id="tab-saved" type="button" role="tab" aria-selected="false" aria-controls="panel-saved" tabindex="-1">Saved Anime</button>
-      <button class="tracker-tab" id="tab-favorites" type="button" role="tab" aria-selected="false" aria-controls="panel-favorites" tabindex="-1">Favorite Anime</button>
-      <button class="tracker-tab" id="tab-manga-bookmarked" type="button" role="tab" aria-selected="false" aria-controls="panel-manga-bookmarked" tabindex="-1">Bookmarked Manga</button>
-      <button class="tracker-tab" id="tab-manga-saved" type="button" role="tab" aria-selected="false" aria-controls="panel-manga-saved" tabindex="-1">Saved Manga</button>
-      <button class="tracker-tab" id="tab-manga-favorites" type="button" role="tab" aria-selected="false" aria-controls="panel-manga-favorites" tabindex="-1">Favorite Manga</button>
+    <div class="media-tabs" role="tablist" aria-label="Tracker media type">
+      <button class="media-tab" id="tab-my-anime" type="button" role="tab" aria-selected="true" aria-controls="section-my-anime" tabindex="0">My Anime</button>
+      <button class="media-tab" id="tab-my-manga" type="button" role="tab" aria-selected="false" aria-controls="section-my-manga" tabindex="-1">My Manga</button>
     </div>
-    <section class="bookmark-list tracker-panel" id="panel-bookmarked" role="tabpanel" aria-labelledby="tab-bookmarked">
-      <h1 id="bookmarks-heading">Bookmarked Anime</h1>
-      <div class="bookmark-filters" role="group" aria-label="Filter bookmarked anime">
-        <button class="bookmark-filter" id="filter-in-progress" type="button" data-filter="in-progress" aria-pressed="false">In progress</button>
-        <button class="bookmark-filter" id="filter-completed" type="button" data-filter="completed" aria-pressed="false">Completed</button>
+    <section class="media-section" id="section-my-anime" role="tabpanel" aria-labelledby="tab-my-anime">
+      <div class="tracker-tabs" role="tablist" aria-label="My Anime lists">
+        <button class="tracker-tab" id="tab-bookmarked" type="button" role="tab" aria-selected="true" aria-controls="panel-bookmarked" tabindex="0">Bookmarked Anime</button>
+        <button class="tracker-tab" id="tab-saved" type="button" role="tab" aria-selected="false" aria-controls="panel-saved" tabindex="-1">Saved Anime</button>
+        <button class="tracker-tab" id="tab-favorites" type="button" role="tab" aria-selected="false" aria-controls="panel-favorites" tabindex="-1">Favorited Anime</button>
       </div>
-      <p class="bookmark-empty" id="bookmark-filter-empty" aria-live="polite" hidden></p>
-      <div id="anime-bookmarks" aria-live="polite"></div>
+      <section class="bookmark-list tracker-panel" id="panel-bookmarked" role="tabpanel" aria-labelledby="tab-bookmarked">
+        <h1 id="bookmarks-heading">Bookmarked Anime</h1>
+        <div class="bookmark-filters" role="group" aria-label="Filter bookmarked anime">
+          <button class="bookmark-filter" id="filter-in-progress" type="button" data-filter="in-progress" aria-pressed="false">In progress</button>
+          <button class="bookmark-filter" id="filter-completed" type="button" data-filter="completed" aria-pressed="false">Completed</button>
+        </div>
+        <p class="bookmark-empty" id="bookmark-filter-empty" aria-live="polite" hidden></p>
+        <div id="anime-bookmarks" aria-live="polite"></div>
+      </section>
+      <section class="bookmark-list tracker-panel" id="panel-saved" role="tabpanel" aria-labelledby="tab-saved" hidden>
+        <h1 id="saved-heading">Saved Anime</h1>
+        <div id="saved-anime" aria-live="polite"></div>
+      </section>
+      <section class="bookmark-list tracker-panel" id="panel-favorites" role="tabpanel" aria-labelledby="tab-favorites" hidden>
+        <h1 id="favorites-heading">Favorited Anime</h1>
+        <div id="favorite-anime" aria-live="polite"></div>
+      </section>
     </section>
-    <section class="bookmark-list tracker-panel" id="panel-saved" role="tabpanel" aria-labelledby="tab-saved" hidden>
-      <h1 id="saved-heading">Saved Anime</h1>
-      <div id="saved-anime" aria-live="polite"></div>
-    </section>
-    <section class="bookmark-list tracker-panel" id="panel-favorites" role="tabpanel" aria-labelledby="tab-favorites" hidden>
-      <h1 id="favorites-heading">Favorite Anime</h1>
-      <div id="favorite-anime" aria-live="polite"></div>
-    </section>
-    <section class="bookmark-list tracker-panel" id="panel-manga-bookmarked" role="tabpanel" aria-labelledby="tab-manga-bookmarked" hidden>
-      <h1>Bookmarked Manga</h1>
-      <div id="manga-bookmarks" aria-live="polite"></div>
-    </section>
-    <section class="bookmark-list tracker-panel" id="panel-manga-saved" role="tabpanel" aria-labelledby="tab-manga-saved" hidden>
-      <h1>Saved Manga</h1>
-      <div id="saved-manga" aria-live="polite"></div>
-    </section>
-    <section class="bookmark-list tracker-panel" id="panel-manga-favorites" role="tabpanel" aria-labelledby="tab-manga-favorites" hidden>
-      <h1>Favorite Manga</h1>
-      <div id="favorite-manga" aria-live="polite"></div>
+    <section class="media-section" id="section-my-manga" role="tabpanel" aria-labelledby="tab-my-manga" hidden>
+      <div class="tracker-tabs" role="tablist" aria-label="My Manga lists">
+        <button class="tracker-tab" id="tab-manga-bookmarked" type="button" role="tab" aria-selected="true" aria-controls="panel-manga-bookmarked" tabindex="0">Bookmarked Manga</button>
+        <button class="tracker-tab" id="tab-manga-saved" type="button" role="tab" aria-selected="false" aria-controls="panel-manga-saved" tabindex="-1">Saved Manga</button>
+        <button class="tracker-tab" id="tab-manga-favorites" type="button" role="tab" aria-selected="false" aria-controls="panel-manga-favorites" tabindex="-1">Favorite Manga</button>
+      </div>
+      <section class="bookmark-list tracker-panel" id="panel-manga-bookmarked" role="tabpanel" aria-labelledby="tab-manga-bookmarked">
+        <h1>Bookmarked Manga</h1>
+        <div id="manga-bookmarks" aria-live="polite"></div>
+      </section>
+      <section class="bookmark-list tracker-panel" id="panel-manga-saved" role="tabpanel" aria-labelledby="tab-manga-saved" hidden>
+        <h1>Saved Manga</h1>
+        <div id="saved-manga" aria-live="polite"></div>
+      </section>
+      <section class="bookmark-list tracker-panel" id="panel-manga-favorites" role="tabpanel" aria-labelledby="tab-manga-favorites" hidden>
+        <h1>Favorite Manga</h1>
+        <div id="favorite-manga" aria-live="polite"></div>
+      </section>
     </section>
   </main>
   <script src="auth.js?v=favorites-202610"></script>
@@ -512,40 +561,66 @@
       }
     }
 
-    const trackerTabs = [...document.querySelectorAll(".tracker-tab")];
-    trackerTabs.forEach((tab, index) => {
+    function setupTabList(tabList, panelScope) {
+      const tabs = [...tabList.querySelectorAll('[role="tab"]')];
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => {
+          tabs.forEach((listTab) => {
+            const isSelected = listTab === tab;
+            listTab.setAttribute("aria-selected", String(isSelected));
+            listTab.tabIndex = isSelected ? 0 : -1;
+            panelScope.querySelector(`#${listTab.getAttribute("aria-controls")}`).hidden = !isSelected;
+          });
+        });
+        tab.addEventListener("keydown", (event) => {
+          if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+          event.preventDefault();
+          const direction = event.key === "ArrowRight" ? 1 : -1;
+          const nextIndex = (index + direction + tabs.length) % tabs.length;
+          tabs[nextIndex].focus();
+          tabs[nextIndex].click();
+        });
+      });
+      return tabs;
+    }
+
+    const mediaTabList = document.querySelector(".media-tabs");
+    const mediaSections = [...document.querySelectorAll(".media-section")];
+    const mediaTabs = [...mediaTabList.querySelectorAll('[role="tab"]')];
+    mediaTabs.forEach((tab, index) => {
       tab.addEventListener("click", () => {
-        trackerTabs.forEach((trackerTab) => {
-          const isSelected = trackerTab === tab;
-          trackerTab.setAttribute("aria-selected", String(isSelected));
-          trackerTab.tabIndex = isSelected ? 0 : -1;
-          document.querySelector(`#${trackerTab.getAttribute("aria-controls")}`).hidden = !isSelected;
+        mediaTabs.forEach((mediaTab) => {
+          const isSelected = mediaTab === tab;
+          mediaTab.setAttribute("aria-selected", String(isSelected));
+          mediaTab.tabIndex = isSelected ? 0 : -1;
+          document.querySelector(`#${mediaTab.getAttribute("aria-controls")}`).hidden = !isSelected;
         });
       });
       tab.addEventListener("keydown", (event) => {
-        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
-          return;
-        }
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
         event.preventDefault();
-        const nextIndex = (index + (event.key === "ArrowRight" ? 1 : trackerTabs.length - 1)) % trackerTabs.length;
-        trackerTabs[nextIndex].focus();
-        trackerTabs[nextIndex].click();
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const nextIndex = (index + direction + mediaTabs.length) % mediaTabs.length;
+        mediaTabs[nextIndex].focus();
+        mediaTabs[nextIndex].click();
       });
     });
-    if (window.location.hash === "#saved") {
-      trackerTabs[1].click();
-    }
-    if (window.location.hash === "#favorites") {
-      trackerTabs[2].click();
-    }
-    if (window.location.hash === "#manga-bookmarked") {
-      trackerTabs[3].click();
-    }
-    if (window.location.hash === "#manga-saved") {
-      trackerTabs[4].click();
-    }
-    if (window.location.hash === "#manga-favorites") {
-      trackerTabs[5].click();
+
+    mediaSections.forEach((section) => {
+      setupTabList(section.querySelector(".tracker-tabs"), section);
+    });
+
+    const hashTabMap = {
+      "#saved": ["tab-my-anime", "tab-saved"],
+      "#favorites": ["tab-my-anime", "tab-favorites"],
+      "#manga-bookmarked": ["tab-my-manga", "tab-manga-bookmarked"],
+      "#manga-saved": ["tab-my-manga", "tab-manga-saved"],
+      "#manga-favorites": ["tab-my-manga", "tab-manga-favorites"]
+    };
+    const hashTabIds = hashTabMap[window.location.hash];
+    if (hashTabIds) {
+      document.querySelector(`#${hashTabIds[0]}`).click();
+      document.querySelector(`#${hashTabIds[1]}`).click();
     }
 
     window.MamAuth.getUser().then(({ data }) => {

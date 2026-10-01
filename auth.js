@@ -133,6 +133,10 @@
     };
   }
 
+  function logout() {
+    localStorage.removeItem(sessionStorageKey);
+  }
+
   function saveFavoriteGenres(genres) {
     const normalizedEmail = localStorage.getItem(sessionStorageKey);
     const accounts = getAccounts();
@@ -239,5 +243,5 @@
     }
   }
 
-  window.MamAuth = { authenticate, createAccount, getUser, saveFavoriteGenres, saveAnimeToWatchLater, saveAnimeBookmark, toggleAnimeFavorite, saveMangaToWatchLater, saveMangaBookmark, toggleMangaFavorite };
+  window.MamAuth = { authenticate, createAccount, getUser, logout, saveFavoriteGenres, saveAnimeToWatchLater, saveAnimeBookmark, toggleAnimeFavorite, saveMangaToWatchLater, saveMangaBookmark, toggleMangaFavorite };
 })();

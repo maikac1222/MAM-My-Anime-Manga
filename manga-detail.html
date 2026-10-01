@@ -70,14 +70,14 @@
     <a class="ramen-link" href="main-home.html" aria-label="Return to the main page"><img src="ramen.svg" alt=""></a>
   </header>
   <main class="detail-main">
-    <p class="detail-status" id="detail-status" role="status">Loading manga details...</p>
-    <section class="detail-hero" id="detail-hero" hidden>
+    <p class="detail-status" id="manga-detail-status" role="status">Loading manga details...</p>
+    <section class="detail-hero" id="manga-detail-hero" hidden>
       <img class="detail-cover" id="manga-cover" alt="">
       <div class="detail-copy">
         <h1 id="manga-title"></h1>
         <div class="detail-facts" id="manga-facts"></div>
         <div class="detail-actions">
-          <button type="button" id="manga-watch-later">Save to watch later</button>
+          <button type="button" id="manga-watch-later">Save to read later</button>
           <button type="button" class="secondary" id="open-manga-bookmark">Bookmark</button>
           <button type="button" class="secondary favorite-button" id="favorite-manga" aria-pressed="false">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3-4.6-4.5 6.3-.9Z"></path></svg>
@@ -114,6 +114,6 @@
     </form>
   </dialog>
   <script src="auth.js?v=manga-collections-202610"></script>
-  <script src="manga-detail.js?v=manga-detail-202610"></script>
+  <script src="manga-detail.js?v=manga-detail-internal-manga-202610"></script>
 </body>
 </html>

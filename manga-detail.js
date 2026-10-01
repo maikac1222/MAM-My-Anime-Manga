@@ -140,7 +140,7 @@ function makeMangaSuggestion(manga, label) {
   cacheMangaPreview(manga);
   const title = manga.title_english || manga.title || manga.name || "Untitled manga";
   const card = document.createElement("a");
-  card.className = "suggested-anime";
+  card.className = "suggested-manga";
   card.href = `manga-detail.html?id=${encodeURIComponent(manga.mal_id)}`;
   card.setAttribute("aria-label", `${title}, ${label}`);
   const coverUrl = getMangaCover(manga);
@@ -158,10 +158,10 @@ function makeMangaSuggestion(manga, label) {
     card.append(placeholder);
   }
   const type = document.createElement("span");
-  type.className = "suggested-anime-label";
+  type.className = "suggested-manga-label";
   type.textContent = label;
   const titleLabel = document.createElement("span");
-  titleLabel.className = "suggested-anime-title";
+  titleLabel.className = "suggested-manga-title";
   titleLabel.textContent = title;
   card.append(type, titleLabel);
   return card;

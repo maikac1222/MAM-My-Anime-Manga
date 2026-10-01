@@ -407,7 +407,9 @@ async function loadSimilarAnime(show) {
       if (generation !== suggestionLoadGeneration) {
         return;
       }
-      recommendations = (response.data || []).map((item) => item.entry).filter((entry) => entry?.mal_id);
+      recommendations = (response.data || [])
+        .map((item) => item.entry)
+        .filter((entry) => entry?.mal_id && entry.type === "anime");
     } catch {
       requestFailed = true;
     }
@@ -428,7 +430,7 @@ async function loadSimilarAnime(show) {
           if (generation !== suggestionLoadGeneration) {
             return;
           }
-          recommendations.push(...(genreResponse.data || []));
+          recommendations.push(...(genreResponse.data || []).filter((entry) => entry.type === "anime"));
           similarLabel = "Similar genre";
         } catch {
           genreRequestFailed = true;

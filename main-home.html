@@ -10,6 +10,42 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="main-nav.css">
+  <style>
+    .logout-button {
+      position: absolute;
+      top: -12px;
+      right: 0;
+      min-height: 25px;
+      padding: 2px 9px;
+      border: 1px solid rgba(191, 233, 255, 0.5);
+      border-radius: 5px;
+      background: #333333;
+      color: #bfe9ff;
+      font: 500 0.78rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      cursor: pointer;
+    }
+
+    .logout-button:hover {
+      border-color: #bfe9ff;
+      background: #3b4246;
+      color: #ffffff;
+    }
+
+    .logout-button:focus-visible {
+      outline: 3px solid #ffffff;
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 560px) {
+      .logout-button {
+        top: -12px;
+        right: 0;
+        min-height: 23px;
+        padding: 2px 7px;
+        font-size: 0.72rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="site-header site-header--home">
@@ -19,6 +55,7 @@
       <a href="my-tracker.html?v=tracker-bookmark-filters-v3-202610">My Tracker</a>
     </nav>
     <a class="ramen-link" href="main-home.html" aria-label="Return to the main page"><img src="ramen.svg" alt=""></a>
+    <button class="logout-button" id="logout-button" type="button">Log out</button>
   </header>
   <h1 class="home-brand-title">My Anime &amp; Manga</h1>
   <p class="home-brand-subtitle">keep track of all of your favorites here!</p>
@@ -52,9 +89,14 @@
       </div>
     </section>
   </main>
-  <script src="auth.js"></script>
-  <script src="main-home-recommendations.js"></script>
+  <script src="auth.js?v=homepage-logout-202610"></script>
+  <script src="main-home-recommendations.js?v=online-manga-covers-202610-v2"></script>
   <script>
+    document.querySelector("#logout-button").addEventListener("click", () => {
+      window.MamAuth.logout();
+      window.location.replace("index.html");
+    });
+
     window.MamAuth.getUser().then(({ data }) => {
       if (!data.user) {
         window.location.replace("index.html");

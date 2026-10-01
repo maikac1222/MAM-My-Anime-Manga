@@ -8,53 +8,302 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="main-nav.css">
+  <link rel="stylesheet" href="main-nav.css?v=2">
   <style>
-    .anime-page { width: min(100%, 1080px); margin: 42px auto 0; text-align: left; }
-    .anime-discovery-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 32px; padding-bottom: 26px; border-bottom: 1px solid rgba(191, 233, 255, .24); }
-    .anime-heading { min-width: 155px; }
-    .anime-eyebrow { margin: 0 0 6px; color: #f1dfbd; font: 500 .85rem "Fredoka", "Arial Rounded MT Bold", sans-serif; }
-    .anime-page h1 { text-align: left; }
-    .genre-browser { width: min(100%, 650px); }
-    .genre-heading { display: flex; align-items: baseline; justify-content: flex-end; gap: 12px; margin-bottom: 10px; }
-    .genre-heading h2 { margin: 0; color: #bfe9ff; font: 600 1.3rem "Fredoka", "Arial Rounded MT Bold", sans-serif; }
-    .genre-selection { color: #d3d3d3; font-size: .8rem; }
-    .genre-options { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
-    .genre-chip { min-height: 32px; padding: 5px 12px; border: 1px solid rgba(191, 233, 255, .44); border-radius: 999px; background: #333; color: #d3d3d3; font: 500 .82rem "Fredoka", "Arial Rounded MT Bold", sans-serif; cursor: pointer; transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease; }
-    .genre-chip:hover { border-color: #bfe9ff; color: #fff; }
-    .genre-chip[aria-pressed="true"] { border-color: #bfe9ff; background: #bfe9ff; color: #292929; }
-    .genre-chip:focus-visible, .search-submit:focus-visible, .shuffle-button:focus-visible, .anime-card:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
-    .genre-chip[hidden] { display: none; }
-    .anime-searches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 22px 0 28px; }
-    .search-box { display: flex; min-width: 0; align-items: center; border: 1px solid rgba(191, 233, 255, .5); border-radius: 8px; background: #333; }
-    .search-box:focus-within { border-color: #fff; box-shadow: 0 0 0 2px rgba(191, 233, 255, .16); }
-    .search-box input { width: 100%; min-width: 0; min-height: 46px; padding: 0 8px 0 14px; border: 0; outline: 0; background: transparent; color: #fff; font: 400 .95rem "Avenir Next", Avenir, sans-serif; }
-    .search-box input::placeholder { color: #b8c2c7; opacity: 1; }
-    .search-submit { display: grid; flex: 0 0 44px; width: 44px; height: 44px; place-items: center; border: 0; border-radius: 6px; background: transparent; color: #bfe9ff; cursor: pointer; }
-    .search-submit:hover { background: rgba(191, 233, 255, .1); }
-    .search-submit svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-width: 2; }
-    .anime-results-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 0 0 12px; }
-    .anime-results-heading h2 { margin: 0; color: #bfe9ff; font: 600 1.35rem "Fredoka", "Arial Rounded MT Bold", sans-serif; }
-    .shuffle-button { display: inline-flex; min-height: 38px; align-items: center; gap: 8px; padding: 6px 11px; border: 1px solid rgba(191, 233, 255, .42); border-radius: 6px; background: #333; color: #bfe9ff; font: 500 .9rem "Fredoka", "Arial Rounded MT Bold", sans-serif; cursor: pointer; }
-    .shuffle-button svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
-    .anime-status { min-height: 1.5em; margin: 0 0 12px; color: #d3d3d3; font: 400 .92rem "Avenir Next", Avenir, sans-serif; }
-    .anime-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 24px 16px; padding-bottom: 48px; }
-    .anime-card { display: grid; align-content: start; gap: 8px; min-width: 0; color: #bfe9ff; text-decoration: none; }
-    .anime-card img, .anime-cover-placeholder { display: grid; width: 100%; aspect-ratio: 2 / 3; place-items: center; border: 1px solid rgba(191, 233, 255, .38); border-radius: 7px; background: #333; color: #f1dfbd; object-fit: cover; text-align: center; transition: transform 150ms ease, border-color 150ms ease; }
-    .anime-card:hover img, .anime-card:hover .anime-cover-placeholder { transform: translateY(-2px); border-color: #bfe9ff; }
-    .anime-card-title { display: -webkit-box; overflow: hidden; color: #bfe9ff; font: 500 .96rem/1.3 "Fredoka", "Arial Rounded MT Bold", sans-serif; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
-    .anime-card-meta { color: #c3cbd0; font: 400 .78rem/1.4 "Avenir Next", Avenir, sans-serif; }
-    @media (max-width: 700px) {
-      .anime-page { margin-top: 28px; }
-      .anime-discovery-header { display: grid; gap: 20px; }
-      .genre-browser { width: 100%; }
-      .genre-heading { justify-content: flex-start; }
-      .genre-options { justify-content: flex-start; }
+    .anime-page {
+      width: min(100%, 1080px);
+      margin: 42px auto 0;
+      text-align: left;
     }
+
+    .anime-discovery-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 32px;
+      padding-bottom: 26px;
+      border-bottom: 1px solid rgba(191, 233, 255, 0.24);
+    }
+
+    .anime-heading {
+      min-width: 155px;
+    }
+
+    .anime-eyebrow {
+      margin: 0 0 6px;
+      color: #f1dfbd;
+      font: 500 0.85rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+    }
+
+    .anime-page h1 {
+      text-align: left;
+    }
+
+    .genre-browser {
+      width: min(100%, 650px);
+    }
+
+    .genre-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .genre-heading h2,
+    .anime-results-heading h2 {
+      margin: 0;
+      color: #bfe9ff;
+      font: 600 1.3rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+    }
+
+    .genre-selection {
+      color: #d3d3d3;
+      font-size: 0.8rem;
+    }
+
+    .genre-options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .genre-chip {
+      min-height: 32px;
+      padding: 5px 12px;
+      border: 1px solid rgba(191, 233, 255, 0.44);
+      border-radius: 999px;
+      background: #333333;
+      color: #d3d3d3;
+      font: 500 0.82rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      cursor: pointer;
+      transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+    }
+
+    .genre-chip:hover {
+      border-color: #bfe9ff;
+      color: #ffffff;
+    }
+
+    .genre-chip[aria-pressed="true"] {
+      border-color: #bfe9ff;
+      background: #bfe9ff;
+      color: #292929;
+    }
+
+    .genre-chip:focus-visible,
+    .search-submit:focus-visible,
+    .shuffle-button:focus-visible,
+    .anime-card:focus-visible {
+      outline: 3px solid #ffffff;
+      outline-offset: 3px;
+    }
+
+    .genre-chip[hidden] {
+      display: none;
+    }
+
+    .anime-searches {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 22px 0 28px;
+    }
+
+    .search-box {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      border: 1px solid rgba(191, 233, 255, 0.5);
+      border-radius: 8px;
+      background: #333333;
+    }
+
+    .search-box:focus-within {
+      border-color: #ffffff;
+      box-shadow: 0 0 0 2px rgba(191, 233, 255, 0.16);
+    }
+
+    .search-box input {
+      width: 100%;
+      min-width: 0;
+      min-height: 46px;
+      padding: 0 8px 0 14px;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #ffffff;
+      font: 400 0.95rem "Avenir Next", Avenir, sans-serif;
+    }
+
+    .search-box input::placeholder {
+      color: #b8c2c7;
+      opacity: 1;
+    }
+
+    .search-submit {
+      display: grid;
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: #bfe9ff;
+      cursor: pointer;
+    }
+
+    .search-submit:hover {
+      background: rgba(191, 233, 255, 0.1);
+    }
+
+    .search-submit svg {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-width: 2;
+    }
+
+    .anime-results-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 0 12px;
+    }
+
+    .anime-results-heading h2 {
+      font-size: 1.35rem;
+    }
+
+    .shuffle-button {
+      display: inline-flex;
+      min-height: 38px;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 11px;
+      border: 1px solid rgba(191, 233, 255, 0.42);
+      border-radius: 6px;
+      background: #333333;
+      color: #bfe9ff;
+      font: 500 0.9rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      cursor: pointer;
+    }
+
+    .shuffle-button:hover {
+      background: #3b4246;
+    }
+
+    .shuffle-button svg {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+
+    .anime-status {
+      min-height: 1.5em;
+      margin: 0 0 12px;
+      color: #d3d3d3;
+      font: 400 0.92rem "Avenir Next", Avenir, sans-serif;
+    }
+
+    .anime-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 24px 16px;
+      padding-bottom: 48px;
+    }
+
+    .anime-card {
+      display: grid;
+      align-content: start;
+      gap: 8px;
+      min-width: 0;
+      color: #bfe9ff;
+      text-decoration: none;
+    }
+
+    .anime-card img,
+    .anime-cover-placeholder {
+      display: grid;
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      place-items: center;
+      border: 1px solid rgba(191, 233, 255, 0.38);
+      border-radius: 7px;
+      background: #333333;
+      color: #f1dfbd;
+      object-fit: cover;
+      text-align: center;
+      transition: transform 150ms ease, border-color 150ms ease;
+    }
+
+    .anime-card:hover img,
+    .anime-card:hover .anime-cover-placeholder {
+      transform: translateY(-2px);
+      border-color: #bfe9ff;
+    }
+
+    .anime-card-title {
+      display: -webkit-box;
+      overflow: hidden;
+      color: #bfe9ff;
+      font: 500 0.96rem/1.3 "Fredoka", "Arial Rounded MT Bold", sans-serif;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+
+    .anime-card-meta {
+      color: #c3cbd0;
+      font: 400 0.78rem/1.4 "Avenir Next", Avenir, sans-serif;
+    }
+
+    @media (max-width: 700px) {
+      .anime-page {
+        margin-top: 28px;
+      }
+
+      .anime-discovery-header {
+        display: grid;
+        gap: 20px;
+      }
+
+      .genre-browser {
+        width: 100%;
+      }
+
+      .genre-heading,
+      .genre-options {
+        justify-content: flex-start;
+      }
+    }
+
     @media (max-width: 520px) {
-      .anime-searches { grid-template-columns: 1fr; gap: 10px; margin-top: 18px; }
-      .anime-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 12px; }
-      .genre-chip { min-height: 30px; padding: 4px 10px; }
+      .anime-searches {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .anime-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px 12px;
+      }
+
+      .genre-chip {
+        min-height: 30px;
+        padding: 4px 10px;
+      }
     }
   </style>
 </head>
@@ -109,5 +358,10 @@
   </main>
   <script src="auth.js"></script>
   <script src="anime-browser.js?v=online-catalog-202610"></script>
+  <script>
+    window.MamAuth.getUser().then(({ data }) => {
+      if (!data.user) window.location.replace("index.html");
+    });
+  </script>
 </body>
 </html>
