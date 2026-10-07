@@ -38,6 +38,427 @@ body {
   left: 0;
 }
 
+.account-actions {
+  position: absolute;
+  top: -12px;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.profile-link {
+  position: relative;
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(190, 190, 190, 0.55);
+  border-radius: 50%;
+  background: #333333;
+  color: #a0a0a0;
+  padding: 0;
+  text-decoration: none;
+}
+
+.profile-link:hover {
+  border-color: #d0d0d0;
+  background: #3b4246;
+  color: #d0d0d0;
+}
+
+.profile-link:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+}
+
+.profile-link svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.profile-link svg[hidden] {
+  display: none !important;
+}
+
+.profile-link .profile-avatar-image {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.profile-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  width: 190px;
+  padding: 6px;
+  border: 1px solid rgba(191, 233, 255, 0.4);
+  border-radius: 6px;
+  background: #333333;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.profile-menu[hidden] {
+  display: none;
+}
+
+.profile-menu button {
+  display: flex;
+  width: 100%;
+  min-height: 38px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #e5e5e5;
+  font: 500 0.92rem "Avenir Next", Avenir, sans-serif;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-menu button:hover,
+.profile-menu button:focus-visible {
+  background: #454545;
+  color: #ffffff;
+}
+
+.profile-menu button.is-selected::after {
+  content: "✓";
+  color: #bfe9ff;
+}
+
+.profile-menu button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.profile-menu-divider {
+  height: 1px;
+  margin: 5px 4px;
+  background: rgba(191, 233, 255, 0.2);
+}
+
+.account-dialog {
+  width: min(92vw, 440px);
+  max-height: min(88vh, 760px);
+  padding: 24px;
+  overflow: auto;
+  border: 1px solid rgba(191, 233, 255, 0.55);
+  border-radius: 8px;
+  background: #333333;
+  color: #bfe9ff;
+}
+
+.account-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.account-form {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.account-form h2 {
+  margin: 0 0 4px;
+  color: #bfe9ff;
+  font: 600 1.45rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+}
+
+.account-form label {
+  color: #e5e5e5;
+  font: 500 0.9rem "Avenir Next", Avenir, sans-serif;
+}
+
+.account-form input {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid #788c94;
+  border-radius: 4px;
+  background: #252525;
+  color: #ffffff;
+  font: 400 0.95rem "Avenir Next", Avenir, sans-serif;
+}
+
+.account-form input[type="file"] {
+  min-height: auto;
+  padding: 6px;
+}
+
+.profile-picture-preview {
+  display: grid;
+  width: 84px;
+  height: 84px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(191, 233, 255, 0.45);
+  border-radius: 50%;
+  background: #252525;
+  color: #a0a0a0;
+  font-size: 0.72rem;
+}
+
+.profile-picture-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-crop-canvas {
+  display: block;
+  width: min(100%, 300px);
+  aspect-ratio: 1;
+  justify-self: center;
+  border: 1px solid rgba(191, 233, 255, 0.45);
+  border-radius: 50%;
+  background: #252525;
+  cursor: grab;
+  touch-action: none;
+}
+
+.profile-crop-canvas:active {
+  cursor: grabbing;
+}
+
+.account-form input[type="range"] {
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  accent-color: #bfe9ff;
+  cursor: pointer;
+}
+
+.account-form-note,
+.account-current-email,
+.account-form-status {
+  min-height: 1.2em;
+  margin: 0;
+  color: #d3d3d3;
+  font: 400 0.82rem "Avenir Next", Avenir, sans-serif;
+}
+
+.account-form-status {
+  color: #f1dfbd;
+}
+
+.account-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.account-form button {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid #bfe9ff;
+  border-radius: 5px;
+  background: #bfe9ff;
+  color: #292929;
+  font: 600 0.9rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+  cursor: pointer;
+}
+
+.account-form button:hover {
+  background: #ffffff;
+}
+
+.account-password-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.account-password-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.account-form .account-password-toggle {
+  display: grid;
+  flex: 0 0 40px;
+  width: 40px;
+  min-height: 40px;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #788c94;
+  border-radius: 4px;
+  background: #252525;
+  color: #bfe9ff;
+  box-shadow: none;
+}
+
+.account-password-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.account-password-toggle[aria-pressed="true"] .eye-slash {
+  display: none;
+}
+
+.account-form .account-password-toggle:hover {
+  border-color: #bfe9ff;
+  background: #3b4246;
+  color: #ffffff;
+}
+
+.account-form .account-secondary-button {
+  border-color: rgba(191, 233, 255, 0.5);
+  background: transparent;
+  color: #bfe9ff;
+}
+
+.account-form .account-secondary-button:hover {
+  background: #454545;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  background: #f1f4f5;
+  color: #27343a;
+}
+
+html[data-theme="light"] body {
+  background: #f1f4f5 !important;
+  color: #27343a !important;
+}
+
+html[data-theme="light"] :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, select) {
+  border-color: #87979d !important;
+  background: #ffffff !important;
+  color: #27343a !important;
+  color-scheme: light;
+}
+
+html[data-theme="light"] :is(input, textarea)::placeholder {
+  color: #687980 !important;
+  opacity: 1;
+}
+
+html[data-theme="light"] :is(input[type="checkbox"], input[type="radio"]) {
+  border-color: #87979d !important;
+  background: #ffffff !important;
+  accent-color: #526a74;
+  color-scheme: light;
+}
+
+html[data-theme="light"] select option {
+  background: #ffffff;
+  color: #27343a;
+}
+
+html[data-theme="light"] :is(h1, h2, h3, p, label, .site-nav a, .home-brand-title, .home-panel-heading, .poster-card-title, .poster-status, .detail-copy, .bookmark-item, .tracker-tabs, .tracker-panel) {
+  color: #27343a !important;
+}
+
+html[data-theme="light"] :is(.media-tab, .tracker-tab) {
+  color: #334a55 !important;
+}
+
+html[data-theme="light"] :is(.media-tab, .tracker-tab)[aria-selected="true"] {
+  border-bottom-color: #526a74 !important;
+  color: #172b33 !important;
+}
+
+html[data-theme="light"] :is(.media-tab, .tracker-tab):focus-visible {
+  outline-color: #334a55 !important;
+}
+
+html[data-theme="light"] :is(.home-panel, .bookmark-dialog, .entry-box, .genre-option, .genre-chip, .search-box, .tracker-panel, .bookmark-item, .profile-menu, .account-dialog, .carousel-control, .account-form input) {
+  border-color: rgba(39, 52, 58, 0.28) !important;
+  background-color: #ffffff !important;
+  color: #27343a !important;
+}
+
+html[data-theme="light"] :is(.genre-option, .genre-chip, .bookmark-filter) {
+  border-color: #87979d !important;
+  background: #ffffff !important;
+  color: #334a55 !important;
+}
+
+html[data-theme="light"] :is(.genre-option, .genre-chip, .bookmark-filter):hover {
+  border-color: #526a74 !important;
+  background: #edf2f3 !important;
+  color: #172b33 !important;
+}
+
+html[data-theme="light"] :is(.genre-option, .genre-chip, .bookmark-filter)[aria-pressed="true"] {
+  border-color: #526a74 !important;
+  background: #dce7ea !important;
+  color: #172b33 !important;
+}
+
+html[data-theme="light"] :is(.profile-menu button, .account-form label, .account-form h2, .account-form-note, .account-current-email, .profile-picture-preview) {
+  color: #27343a !important;
+}
+
+html[data-theme="light"] .account-form input {
+  background: #f7f9f9 !important;
+}
+
+html[data-theme="light"] .account-form input[type="range"] {
+  background: transparent !important;
+}
+
+html[data-theme="light"] .account-form .account-secondary-button {
+  border-color: rgba(39, 52, 58, 0.38) !important;
+  background: transparent !important;
+  color: #27343a !important;
+}
+
+html[data-theme="light"] .account-form .account-password-toggle {
+  border-color: rgba(39, 52, 58, 0.38) !important;
+  background: #f7f9f9 !important;
+  color: #27343a !important;
+}
+
+html[data-theme="light"] .account-form-status {
+  color: #695011 !important;
+}
+
+.logout-button {
+  min-height: 25px;
+  padding: 2px 9px;
+  border: 1px solid rgba(191, 233, 255, 0.5);
+  border-radius: 5px;
+  background: #333333;
+  color: #bfe9ff;
+  font: 500 0.78rem "Fredoka", "Arial Rounded MT Bold", sans-serif;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  border-color: #bfe9ff;
+  background: #3b4246;
+  color: #ffffff;
+}
+
+.logout-button:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+}
+
 .site-nav {
   display: flex;
   width: min(100%, 700px);
@@ -266,6 +687,25 @@ h1 {
   .site-header--home {
     padding-right: 0;
     padding-left: 62px;
+  }
+
+  .account-actions {
+    top: -12px;
+  }
+
+  .profile-link {
+    width: 26px;
+    height: 26px;
+  }
+
+  .logout-button {
+    min-height: 23px;
+    padding: 2px 7px;
+    font-size: 0.72rem;
+  }
+
+  .account-dialog {
+    padding: 18px;
   }
 
   .site-nav {

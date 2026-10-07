@@ -70,16 +70,6 @@ function createOfflineCover(title, category, index) {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(artwork)}`;
 }
 
-const offlineRecommendations = {
-  anime: [
-    { mal_id: 16498, title: "Attack on Titan", genres: ["Action", "Adventure", "Drama", "Fantasy"] },
-    { mal_id: 5114, title: "Fullmetal Alchemist: Brotherhood", genres: ["Action", "Adventure", "Drama", "Fantasy"] },
-    { mal_id: 1535, title: "Death Note", genres: ["Mystery", "Supernatural", "Thriller"] },
-    { mal_id: 20, title: "Naruto", genres: ["Action", "Adventure"] },
-    { mal_id: 21, title: "One Piece", genres: ["Action", "Adventure", "Fantasy"] }
-  ]
-};
-
 function getRecommendationCacheKey(category, preferredGenres, user) {
   const identity = user?.email?.toLowerCase() || "guest";
   const genres = [...preferredGenres].sort().join(",");
@@ -114,12 +104,9 @@ function rankRecommendations(shows, preferredGenres, category) {
       }).length
     }))
     .sort((first, second) => second.matchingGenres - first.matchingGenres || (second.show.score || 0) - (first.show.score || 0))
-    .filter(({ show }) => getPosterUrls(show).length > 0 || show.offlineFallback)
+    .filter(({ show }) => getPosterUrls(show).length > 0)
     .slice(0, 12)
-    .map(({ show }) => ({
-      ...show,
-      offlineFallback: show.offlineFallback || false
-    }));
+    .map(({ show }) => show);
 }
 
 async function fetchTopShows(category, onRetry) {
@@ -159,6 +146,49 @@ async function fetchTopShows(category, onRetry) {
 
     onRetry();
     await new Promise((resolve) => window.setTimeout(resolve, 400));
+  }
+}
+
+async function fetchAniListAnime() {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), 7000);
+
+  try {
+    const response = await fetch("https://graphql.anilist.co", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      signal: controller.signal,
+      body: JSON.stringify({
+        query: "query { Page(page: 1, perPage: 24) { media(type: ANIME, sort: POPULARITY_DESC) { idMal title { english romaji } coverImage { extraLarge large } description(asHtml: false) episodes format genres averageScore } } }"
+      })
+    });
+    if (!response.ok) {
+      throw new Error("Online Anime recommendations could not be loaded");
+    }
+
+    const payload = await response.json();
+    if (payload.errors?.length) {
+      throw new Error("Online Anime recommendations could not be loaded");
+    }
+
+    return (payload.data?.Page?.media || [])
+      .filter((anime) => anime.idMal && (anime.title?.english || anime.title?.romaji))
+      .map((anime) => {
+        const cover = anime.coverImage?.extraLarge || anime.coverImage?.large || "";
+        return {
+          mal_id: anime.idMal,
+          title_english: anime.title?.english || "",
+          title: anime.title?.romaji || "Untitled anime",
+          synopsis: anime.description || "",
+          episodes: anime.episodes || null,
+          type: anime.format || null,
+          score: anime.averageScore ? anime.averageScore / 10 : null,
+          genres: (anime.genres || []).map((name) => ({ name })),
+          images: { webp: { large_image_url: cover }, jpg: { large_image_url: cover } }
+        };
+      });
+  } finally {
+    window.clearTimeout(timeoutId);
   }
 }
 
@@ -246,7 +276,7 @@ function renderRecommendations(carousel, status, recommendations, category) {
 
     const description = document.createElement("p");
     description.className = "poster-card-description";
-    description.textContent = show.synopsis?.replace(/\s+/g, " ").trim() || "Offline recommendation.";
+    description.textContent = show.synopsis?.replace(/\s+/g, " ").trim() || "No synopsis available.";
 
     const card = document.createElement("a");
     card.className = "poster-card";
@@ -267,19 +297,12 @@ async function loadRecommendations(carousel, preferredGenres, user) {
   const category = carousel.dataset.category;
   const cacheKey = getRecommendationCacheKey(category, preferredGenres, user);
   const cached = readRecommendationCache(cacheKey);
-  const fallback = (offlineRecommendations[category] || []).map((show) => ({
-    ...show,
-    genres: show.genres.map((name) => ({ name })),
-    synopsis: "Offline recommendation.",
-    offlineFallback: true
-  }));
-  const initialRecommendations = cached?.length
-    ? cached
-    : rankRecommendations(fallback, preferredGenres, category);
+  const initialRecommendations = cached?.length ? cached : [];
   const hasInitialRecommendations = renderRecommendations(carousel, status, initialRecommendations, category);
 
   try {
     let onlineShows;
+    let usedAniListFallback = false;
     try {
       const responseData = await fetchTopShows(category, () => {
         if (!hasInitialRecommendations) {
@@ -288,17 +311,16 @@ async function loadRecommendations(carousel, preferredGenres, user) {
       });
       onlineShows = responseData.data || [];
     } catch (error) {
-      if (category !== "manga") {
-        throw error;
-      }
-      status.textContent = "Loading online Manga covers...";
-      onlineShows = await fetchAniListManga();
+      usedAniListFallback = true;
+      status.textContent = category === "manga" ? "Loading online Manga covers..." : "Loading online Anime recommendations...";
+      onlineShows = category === "manga" ? await fetchAniListManga() : await fetchAniListAnime();
     }
 
     let recommendations = rankRecommendations(onlineShows, preferredGenres, category);
-    if (!recommendations.length && category === "manga") {
-      status.textContent = "Loading online Manga covers...";
-      recommendations = rankRecommendations(await fetchAniListManga(), preferredGenres, category);
+    if (!recommendations.length && !usedAniListFallback) {
+      status.textContent = category === "manga" ? "Loading online Manga covers..." : "Loading online Anime recommendations...";
+      const alternateShows = category === "manga" ? await fetchAniListManga() : await fetchAniListAnime();
+      recommendations = rankRecommendations(alternateShows, preferredGenres, category);
     }
 
     if (!recommendations.length) {
@@ -311,7 +333,7 @@ async function loadRecommendations(carousel, preferredGenres, user) {
     if (!hasInitialRecommendations) {
       status.textContent = category === "manga"
         ? "Online Manga recommendations couldn't load. Check your connection and refresh."
-        : "Recommendations couldn't load. Check your connection and refresh.";
+        : "Online Anime recommendations couldn't load. Check your connection and refresh.";
     }
   }
 }

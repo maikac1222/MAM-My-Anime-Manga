@@ -5,6 +5,48 @@ let currentManga = null;
 let currentUser = null;
 let mangaSuggestionGeneration = 0;
 
+function enforceCommentWordLimit(textarea, counter) {
+  const words = [...textarea.value.matchAll(/\S+/g)];
+  if (words.length > 1600) {
+    textarea.value = textarea.value.slice(0, words[1600].index).trimEnd();
+  }
+  const wordCount = (textarea.value.match(/\S+/g) || []).length;
+  counter.textContent = `${wordCount.toLocaleString()} / 1,600 words`;
+  return wordCount;
+}
+
+function setProgressMaximum(input, total, unknownMaximum = null) {
+  const maximum = Math.floor(Number(total));
+  if (Number.isFinite(maximum) && maximum > 0) {
+    input.max = String(maximum);
+    if (input.value !== "" && Number(input.value) > maximum) {
+      input.value = String(maximum);
+    }
+  } else if (unknownMaximum) {
+    input.max = String(unknownMaximum);
+    if (input.value !== "" && Number(input.value) > unknownMaximum) {
+      input.value = String(unknownMaximum);
+    }
+  } else {
+    input.removeAttribute("max");
+  }
+}
+
+function watchProgressLimit(input) {
+  input.addEventListener("input", () => {
+    if (/^0{2,}$/.test(input.value)) {
+      input.value = "0";
+    }
+    if (input.max && input.value !== "" && Number(input.value) > Number(input.max)) {
+      input.value = input.max;
+    }
+  });
+}
+
+function exceedsProgressLimit(input) {
+  return Boolean(input.max && Number(input.value) > Number(input.max));
+}
+
 async function fetchJikanManga(path) {
   let lastError;
   for (let attempt = 0; attempt < 2; attempt += 1) {
@@ -258,10 +300,16 @@ async function loadSimilarManga(manga) {
 
 function showMangaBookmark() {
   const existing = (currentUser.mangaBookmarks || []).find((item) => String(item.id) === String(currentManga.id));
-  document.querySelector("#volume-progress").value = String(existing?.volumeProgress || 1);
-  document.querySelector("#chapter-progress").value = String(existing?.chapterProgress || 0);
+  const volumeInput = document.querySelector("#volume-progress");
+  const chapterInput = document.querySelector("#chapter-progress");
+  volumeInput.value = String(existing?.volumeProgress || 1);
+  chapterInput.value = String(existing?.chapterProgress || 0);
+  setProgressMaximum(volumeInput, currentManga.volumeCount || existing?.volumeCount, 99999);
+  setProgressMaximum(chapterInput, currentManga.chapterCount || existing?.chapterCount, 99999);
   document.querySelector("#manga-completed").checked = Boolean(existing?.completed);
-  document.querySelector("#manga-comment").value = existing?.comment || "";
+  const commentInput = document.querySelector("#manga-comment");
+  commentInput.value = existing?.comment || "";
+  enforceCommentWordLimit(commentInput, document.querySelector("#manga-comment-count"));
   document.querySelector("#manga-completion-status").textContent = "";
   mangaDialog.showModal();
 }
@@ -356,9 +404,16 @@ async function loadMangaDetail() {
     document.querySelector("#retry-manga-suggestions").addEventListener("click", () => loadSimilarManga(manga));
     const completedInput = document.querySelector("#manga-completed");
     const chapterInput = document.querySelector("#chapter-progress");
+    const volumeInput = document.querySelector("#volume-progress");
+    const commentInput = document.querySelector("#manga-comment");
+    const commentCounter = document.querySelector("#manga-comment-count");
+    [volumeInput, chapterInput].forEach(watchProgressLimit);
+    commentInput.addEventListener("input", () => enforceCommentWordLimit(commentInput, commentCounter));
+    setProgressMaximum(volumeInput, currentManga.volumeCount, 99999);
+    setProgressMaximum(chapterInput, currentManga.chapterCount, 99999);
     completedInput.addEventListener("change", () => {
       if (completedInput.checked && currentManga.chapterCount) {
-        chapterInput.max = String(currentManga.chapterCount);
+        setProgressMaximum(chapterInput, currentManga.chapterCount);
         chapterInput.value = String(currentManga.chapterCount);
         document.querySelector("#manga-completion-status").textContent = `Chapter set to ${currentManga.chapterCount}.`;
       } else if (completedInput.checked) {
@@ -369,12 +424,28 @@ async function loadMangaDetail() {
     });
     document.querySelector("#manga-bookmark-form").addEventListener("submit", (event) => {
       event.preventDefault();
+      [volumeInput, chapterInput].forEach((input) => {
+        if (/^0{2,}$/.test(input.value)) {
+          input.value = "0";
+        }
+      });
+      enforceCommentWordLimit(commentInput, commentCounter);
       const completed = completedInput.checked;
       const chapterProgress = completed && currentManga.chapterCount
         ? Number(currentManga.chapterCount)
         : Number(chapterInput.value);
-      const volumeProgress = Number(document.querySelector("#volume-progress").value);
-      const comment = document.querySelector("#manga-comment").value.trim();
+      if (exceedsProgressLimit(volumeInput)) {
+        document.querySelector("#manga-completion-status").textContent = `Volume cannot exceed ${volumeInput.max}.`;
+        volumeInput.focus();
+        return;
+      }
+      if (exceedsProgressLimit(chapterInput)) {
+        document.querySelector("#manga-completion-status").textContent = `Chapter cannot exceed ${chapterInput.max}.`;
+        chapterInput.focus();
+        return;
+      }
+      const volumeProgress = Number(volumeInput.value);
+      const comment = commentInput.value.trim();
       const bookmark = { ...currentManga, volumeProgress, chapterProgress, completed, comment };
       if (!window.MamAuth.saveMangaBookmark(bookmark)) return;
       currentUser.mangaBookmarks = currentUser.mangaBookmarks || [];

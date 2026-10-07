@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="main-nav.css">
+  <link rel="stylesheet" href="main-nav.css?v=account-menu-settings-v9-202610">
   <style>
     .detail-main { width: min(100%, 1000px); margin: 42px auto 0; text-align: left; }
     .detail-hero { display: grid; grid-template-columns: minmax(190px, 290px) minmax(0, 1fr); gap: 32px; align-items: start; }
@@ -69,6 +69,12 @@
       <a href="my-tracker.html?v=tracker-bookmark-filters-v3-202610">My Tracker</a>
     </nav>
     <a class="ramen-link" href="main-home.html" aria-label="Return to the main page"><img src="ramen.svg" alt=""></a>
+    <div class="account-actions">
+      <a class="profile-link" href="my-tracker.html?v=tracker-bookmark-filters-v3-202610" aria-label="Open your profile and tracker" title="Profile and tracker">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20c0-4.1 2.8-6.5 7-6.5s7 2.4 7 6.5Z"></path></svg>
+      </a>
+      <button class="logout-button" id="logout-button" type="button">Log out</button>
+    </div>
   </header>
   <main class="detail-main">
     <p class="detail-status" id="detail-status" role="status">Loading anime details...</p>
@@ -111,13 +117,14 @@
       <p class="completion-status" id="completion-status" role="status" aria-live="polite"></p>
       <label for="anime-comment">My comment</label>
       <textarea id="anime-comment" name="comment" placeholder="Add a note to remember this anime"></textarea>
+      <p class="completion-status" id="anime-comment-count" role="status" aria-live="polite">0 / 1,600 words</p>
       <div class="dialog-actions">
         <button type="button" class="secondary" id="cancel-bookmark">Cancel</button>
         <button type="submit">Submit</button>
       </div>
     </form>
   </dialog>
-  <script src="auth.js?v=favorites-202610"></script>
+  <script src="auth.js?v=account-menu-settings-v7-202610"></script>
   <script src="anime-detail.js?v=online-detail-fallback-v7"></script>
 </body>
 </html>

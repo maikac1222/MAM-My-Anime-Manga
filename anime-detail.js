@@ -5,6 +5,48 @@ let currentAnime = null;
 let currentUser = null;
 let suggestionLoadGeneration = 0;
 
+function enforceCommentWordLimit(textarea, counter) {
+  const words = [...textarea.value.matchAll(/\S+/g)];
+  if (words.length > 1600) {
+    textarea.value = textarea.value.slice(0, words[1600].index).trimEnd();
+  }
+  const wordCount = (textarea.value.match(/\S+/g) || []).length;
+  counter.textContent = `${wordCount.toLocaleString()} / 1,600 words`;
+  return wordCount;
+}
+
+function setProgressMaximum(input, total, unknownMaximum = null) {
+  const maximum = Math.floor(Number(total));
+  if (Number.isFinite(maximum) && maximum > 0) {
+    input.max = String(maximum);
+    if (input.value !== "" && Number(input.value) > maximum) {
+      input.value = String(maximum);
+    }
+  } else if (unknownMaximum) {
+    input.max = String(unknownMaximum);
+    if (input.value !== "" && Number(input.value) > unknownMaximum) {
+      input.value = String(unknownMaximum);
+    }
+  } else {
+    input.removeAttribute("max");
+  }
+}
+
+function watchProgressLimit(input) {
+  input.addEventListener("input", () => {
+    if (/^0{2,}$/.test(input.value)) {
+      input.value = "0";
+    }
+    if (input.max && input.value !== "" && Number(input.value) > Number(input.max)) {
+      input.value = input.max;
+    }
+  });
+}
+
+function exceedsProgressLimit(input) {
+  return Boolean(input.max && Number(input.value) > Number(input.max));
+}
+
 async function fetchJikan(path) {
   for (let attempt = 0; attempt < 3; attempt += 1) {
     let response;
@@ -475,18 +517,22 @@ async function loadSimilarAnime(show) {
 
 function showBookmarkDialog() {
   const existing = (currentUser.animeBookmarks || []).find((anime) => String(anime.id) === String(currentAnime.id));
-  document.querySelector("#season-progress").value = String(existing?.seasonProgress || 1);
+  const seasonInput = document.querySelector("#season-progress");
+  seasonInput.value = String(existing?.seasonProgress || 1);
+  if (Number(seasonInput.max) > 0) {
+    setProgressMaximum(seasonInput, Number(seasonInput.max));
+  }
   const episodeInput = document.querySelector("#episode-progress");
   const completedInput = document.querySelector("#anime-completed");
   const totalEpisodes = Number(currentAnime.episodeCount) || Number(existing?.episodeCount);
   const isComplete = Boolean(existing?.completed || (totalEpisodes > 0 && Number(existing?.episodeProgress) >= totalEpisodes));
   episodeInput.value = String(isComplete && totalEpisodes > 0 ? totalEpisodes : existing?.episodeProgress || 0);
-  if (totalEpisodes > 0) {
-    episodeInput.max = String(totalEpisodes);
-  }
+  setProgressMaximum(episodeInput, totalEpisodes, 99999);
   completedInput.checked = isComplete;
   document.querySelector("#completion-status").textContent = "";
-  document.querySelector("#anime-comment").value = existing?.comment || "";
+  const commentInput = document.querySelector("#anime-comment");
+  commentInput.value = existing?.comment || "";
+  enforceCommentWordLimit(commentInput, document.querySelector("#anime-comment-count"));
   bookmarkDialog.showModal();
 }
 
@@ -601,7 +647,12 @@ async function loadAnime() {
     document.querySelector("#retry-suggestions").addEventListener("click", () => loadSimilarAnime(show));
     const completedInput = document.querySelector("#anime-completed");
     const episodeInput = document.querySelector("#episode-progress");
+    const seasonInput = document.querySelector("#season-progress");
     const completionStatus = document.querySelector("#completion-status");
+    const commentInput = document.querySelector("#anime-comment");
+    const commentCounter = document.querySelector("#anime-comment-count");
+    [seasonInput, episodeInput].forEach(watchProgressLimit);
+    commentInput.addEventListener("input", () => enforceCommentWordLimit(commentInput, commentCounter));
     completedInput.addEventListener("change", async () => {
       if (!completedInput.checked) {
         completionStatus.textContent = "";
@@ -620,13 +671,19 @@ async function loadAnime() {
       }
 
       currentAnime.episodeCount = totalEpisodes;
-      episodeInput.max = String(totalEpisodes);
+      setProgressMaximum(episodeInput, totalEpisodes);
       episodeInput.value = String(totalEpisodes);
       completionStatus.textContent = `Episode set to ${totalEpisodes}.`;
     });
 
     document.querySelector("#bookmark-form").addEventListener("submit", async (event) => {
       event.preventDefault();
+      [seasonInput, episodeInput].forEach((input) => {
+        if (/^0{2,}$/.test(input.value)) {
+          input.value = "0";
+        }
+      });
+      enforceCommentWordLimit(commentInput, commentCounter);
       const completed = completedInput.checked;
       if (completed && !(Number(currentAnime.episodeCount) > 0)) {
         completionStatus.textContent = "Finding the episode total...";
@@ -636,12 +693,22 @@ async function loadAnime() {
           return;
         }
         currentAnime.episodeCount = totalEpisodes;
-        episodeInput.max = String(totalEpisodes);
+        setProgressMaximum(episodeInput, totalEpisodes);
         episodeInput.value = String(totalEpisodes);
       }
-      const seasonProgress = Number(document.querySelector("#season-progress").value);
+      if (exceedsProgressLimit(seasonInput)) {
+        completionStatus.textContent = `Season cannot exceed ${seasonInput.max}.`;
+        seasonInput.focus();
+        return;
+      }
+      if (exceedsProgressLimit(episodeInput)) {
+        completionStatus.textContent = `Episode cannot exceed ${episodeInput.max}.`;
+        episodeInput.focus();
+        return;
+      }
+      const seasonProgress = Number(seasonInput.value);
       const episodeProgress = completed ? Number(currentAnime.episodeCount) : Number(episodeInput.value);
-      const comment = document.querySelector("#anime-comment").value.trim();
+      const comment = commentInput.value.trim();
       const savedBookmark = window.MamAuth.saveAnimeBookmark({
         ...currentAnime,
         seasonProgress,
@@ -669,10 +736,8 @@ async function loadAnime() {
     const seasonCount = await loadSeasonCount(show);
     currentAnime.seasonCount = seasonCount;
     seasonCountFact.textContent = `Number of seasons: ${seasonCount || "N/A"}`;
-    document.querySelector("#season-progress").max = String(Math.max(seasonCount, 1));
-    if (show.episodes) {
-      document.querySelector("#episode-progress").max = String(show.episodes);
-    }
+    setProgressMaximum(seasonInput, Math.max(seasonCount, 1));
+    setProgressMaximum(episodeInput, currentAnime.episodeCount, 99999);
     loadSimilarAnime(show);
   } catch {
     detailStatus.textContent = "Anime details couldn't load. Check your connection and try again.";

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="main-nav.css?v=2">
+  <link rel="stylesheet" href="main-nav.css?v=account-menu-settings-v9-202610">
   <style>
     .anime-page {
       width: min(100%, 1080px);
@@ -315,6 +315,12 @@
       <a href="my-tracker.html?v=tracker-bookmark-filters-v3-202610">My Tracker</a>
     </nav>
     <a class="ramen-link" href="main-home.html" aria-label="Return to the main page"><img src="ramen.svg" alt=""></a>
+    <div class="account-actions">
+      <a class="profile-link" href="my-tracker.html?v=tracker-bookmark-filters-v3-202610" aria-label="Open your profile and tracker" title="Profile and tracker">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20c0-4.1 2.8-6.5 7-6.5s7 2.4 7 6.5Z"></path></svg>
+      </a>
+      <button class="logout-button" id="logout-button" type="button">Log out</button>
+    </div>
   </header>
   <main class="anime-page">
     <section class="anime-discovery-header" aria-label="Anime discovery filters">
@@ -356,7 +362,7 @@
       <div class="anime-grid" id="anime-grid"></div>
     </section>
   </main>
-  <script src="auth.js"></script>
+  <script src="auth.js?v=account-menu-settings-v7-202610"></script>
   <script src="anime-browser.js?v=online-catalog-202610"></script>
   <script>
     window.MamAuth.getUser().then(({ data }) => {

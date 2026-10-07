@@ -67,6 +67,10 @@
       line-height: 1;
     }
 
+    .entry-box label {
+      text-align: left;
+    }
+
     input {
       width: 100%;
       min-height: 28px;
@@ -88,6 +92,12 @@
       flex: 1;
       width: 0;
       min-width: 0;
+    }
+
+    input::placeholder {
+      color: var(--accent);
+      font-size: 0.78rem;
+      opacity: 0.55;
     }
 
     .password-toggle {
@@ -180,6 +190,7 @@
       text-decoration: underline;
       text-underline-offset: 3px;
     }
+
   </style>
 </head>
 <body>
@@ -188,7 +199,7 @@
     <form id="signup-form" autocomplete="off">
       <div class="entry-box">
         <label for="new-username">Username</label>
-        <input id="new-username" name="username" type="text" autocomplete="username" required>
+        <input id="new-username" name="username" type="text" autocomplete="username" maxlength="25" placeholder="Maximum 25 characters" required>
       </div>
       <div class="entry-box">
         <label for="new-email">Email</label>
@@ -197,7 +208,7 @@
       <div class="entry-box">
         <label for="new-password">Password</label>
         <div class="password-input-row">
-          <input id="new-password" name="password" type="password" autocomplete="new-password" minlength="8" required>
+          <input id="new-password" name="password" type="password" autocomplete="new-password" minlength="8" maxlength="18" placeholder="Maximum 18 characters" required>
           <button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false" aria-controls="new-password">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"></path>
@@ -210,7 +221,7 @@
       <div class="entry-box">
         <label for="confirm-password">Confirm password</label>
         <div class="password-input-row">
-          <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" minlength="8" required>
+          <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" minlength="8" maxlength="18" placeholder="Maximum 18 characters" required>
           <button class="password-toggle" type="button" aria-label="Show confirm password" aria-pressed="false" aria-controls="confirm-password">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"></path>
@@ -225,7 +236,7 @@
     </form>
     <a class="login-link" href="index.html">Back to login</a>
   </main>
-  <script src="auth.js"></script>
+  <script src="auth.js?v=account-menu-settings-v7-202610"></script>
   <script>
     document.querySelectorAll(".password-toggle").forEach((toggle) => {
       const passwordField = document.getElementById(toggle.getAttribute("aria-controls"));
